@@ -453,7 +453,8 @@ namespace SerialCommunicator.ViewModels
 
             if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
             {
-                string received = ReceivedDataBuffer;
+                //takes out \n 
+                string received = ReceivedDataBuffer.Split('\n')[0];
                 ReceivedDataBuffer = "";
                 return received;
             }
