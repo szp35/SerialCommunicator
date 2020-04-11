@@ -18,6 +18,7 @@ namespace SerialCommunicator.ViewModels
         public ICommand ClearSentMessagesCommand { get; set; }
         public ICommand ClearBuffersCommand { get; set; }
         public ICommand SendMessageCommand { get; set; }
+        public ICommand ResetSerialPortCommand { get; set; }
         #endregion
 
         #region Private Fields
@@ -165,6 +166,7 @@ namespace SerialCommunicator.ViewModels
             ClearReceivedMessagesCommand = new Command(ClearReceivedMessages);
             ClearSentMessagesCommand = new Command(ClearSentMessages);
             ClearBuffersCommand = new Command(ClearBuffers);
+            ResetSerialPortCommand = new Command(RestartSerialPort);
 
             RestartSerialPort();
             Settings = new TransceiveSettingsViewModel();

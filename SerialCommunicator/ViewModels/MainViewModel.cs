@@ -18,6 +18,7 @@ namespace SerialCommunicator.ViewModels
         public ICommand MaximizeRestoreCommand { get; set; }
         public ICommand CloseWindowCommand { get; set; }
         public ICommand RefreshCOMPortsCommand { get; set; }
+        public ICommand ResetSerialViewCommand { get; set; }
 
         private ObservableCollection<string> _avaliableComPorts = new ObservableCollection<string>();
         public ObservableCollection<string> AvaliableCOMPorts
@@ -41,6 +42,7 @@ namespace SerialCommunicator.ViewModels
             MaximizeRestoreCommand = new Command(MaximizeRestore);
             CloseWindowCommand = new Command(CloseWindow);
             RefreshCOMPortsCommand = new Command(RefreshCOMPorts);
+            ResetSerialViewCommand = new Command(ResetSerialView);
 
             SerialsList = new SerialsListViewModel();
             SerialsList.ItemChanged = SelectedSerialItemChanged;
@@ -64,6 +66,12 @@ namespace SerialCommunicator.ViewModels
             }
             else
                 SerialView = null;
+        }
+
+        public void ResetSerialView()
+        {
+            SerialView.RestartSerialPort();
+            SerialView = new SerialViewModel();
         }
 
         #region Window Methods

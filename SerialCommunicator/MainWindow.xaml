@@ -177,7 +177,12 @@
                             </Grid>
                             <CheckBox IsChecked="{Binding SerialView.DataTerminalReady, UpdateSourceTrigger=PropertyChanged}" Content="Data Terminal Ready (DTR)" ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')" Height="20" Margin="0,106,0,0" VerticalAlignment="Top"/>
                             <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Right" Margin="0,0,0,29"/>
-                            <ProgressBar IsIndeterminate="{Binding SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" Margin="0,131,0,0"/>
+                            <ProgressBar IsIndeterminate="{Binding SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1 1 0 1" Margin="0,131,100,0"/>
+                            <Button Content="Reset SerialPort" HorizontalAlignment="Left" 
+                                    Command="{Binding ResetSerialViewCommand}"
+                                    Margin="75,131,0,0" 
+                                    Width="100"
+                                    ToolTip="Sometimes a bug that cant be fixed happens. Reset the SerialPort to hopefully fix it. WARNING: WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC"/>
                         </Grid>
                         <Grid Margin="190,10,10,10">
                             <Grid.ColumnDefinitions>
