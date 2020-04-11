@@ -124,8 +124,8 @@
                                             <ColumnDefinition Width="4*" MinWidth="332"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid Grid.Column="0" Margin="0,0,2,0">
-                                            <ListBox x:Name="receivedMessages"
-                                                     HorizontalContentAlignment="Stretch"
+                                            <ListBox x:Name="receivedMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                     HorizontalContentAlignment="Left"
                                                      ItemsSource="{Binding ReceivedMessages, UpdateSourceTrigger=PropertyChanged}" 
                                                      BorderBrush="{DynamicResource ControlDefaultBorderBrush}"
                                                      Margin="0,26,0,0"/>
@@ -137,10 +137,10 @@
                                         </Grid>
                                         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,26,0,0"/>
                                         <Grid Grid.Column="2" Margin="3,0,0,0">
-                                            <ListBox x:Name="sendMessages"
+                                            <ListBox x:Name="sendMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                                      ItemsSource="{Binding SentMessages, UpdateSourceTrigger=PropertyChanged}" 
                                                      BorderBrush="{DynamicResource ControlDefaultBorderBrush}"
-                                                     Margin="0,26,0,0" HorizontalContentAlignment="Stretch"/>
+                                                     Margin="0,26,0,0" HorizontalContentAlignment="Left"/>
                                             <Label Content="Sent Messages" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="1,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="98"/>
                                             <Button Command="{Binding ClearSentMessagesCommand}" Content="Clear" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="100"/>

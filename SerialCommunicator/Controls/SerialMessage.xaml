@@ -3,20 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             HorizontalAlignment="Stretch"
+             HorizontalAlignment="Left"
              HorizontalContentAlignment="Stretch"
-             xmlns:local="clr-namespace:SerialCommunicator.Controls" xmlns:viewmodels="clr-namespace:SerialCommunicator.ViewModels"
-             mc:Ignorable="d" ToolTip="{Binding Time, StringFormat='hh:mm:ss tt'}"
-             MaxWidth="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}">
+             xmlns:local="clr-namespace:SerialCommunicator.Controls" 
+             xmlns:viewmodels="clr-namespace:SerialCommunicator.ViewModels"
+             mc:Ignorable="d" ToolTip="{Binding Time, StringFormat='hh:mm:ss tt'}">
     <Grid>
         <TextBlock Text="{Binding RXorTX, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1,4,0,4"/>
         <TextBlock Text=">" VerticalAlignment="Center" Margin="40,4,0,4" HorizontalAlignment="Left" Width="8"/>
         <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Left" Width="1" Margin="50,2,0,2"/>
-        <Grid x:Name="www">
-            <TextBox Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"
                      Background="Transparent"
-                     Padding="1" Margin="53 2 7 2"/>
-        </Grid>
+                     Padding="1" Margin="53 2 0 2"/>
     </Grid>
 </UserControl>
