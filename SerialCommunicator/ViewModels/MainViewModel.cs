@@ -72,6 +72,7 @@ namespace SerialCommunicator.ViewModels
         {
             SerialView.RestartSerialPort();
             SerialView = new SerialViewModel();
+            SerialsList.SelectedItem.DataContext = SerialView;
         }
 
         #region Window Methods
