@@ -83,7 +83,7 @@ namespace SerialCommunicator.ViewModels
         public double MaxReceivableMessages
         {
             get => _maxReceivableMessages;
-            set { RaisePropertyChanged(ref _maxReceivableMessages, value); UpdateMaxReceivableMessages(int.Parse(Math.Round(value, 0).ToString())); }
+            set { RaisePropertyChanged(ref _maxReceivableMessages, value); }
         }
         public string COMName
         {
@@ -175,6 +175,7 @@ namespace SerialCommunicator.ViewModels
             WriteMessagesToFileCommand = new Command(WriteMessagesToFile);
 
             RestartSerialPort();
+            SerialPort.NewLine = "\n";
             Settings = new TransceiveSettingsViewModel();
 
             // 0.5 seconds, is relatively reasonable.
@@ -246,7 +247,11 @@ namespace SerialCommunicator.ViewModels
                 SerialPort.Open();
                 IsConnected = true;
                 SetWaitingStatus(false);
-                AlertMessage($"Successfully connected to {ActiveCOMName}.");
+                AlertMessage(
+                    $"Successfully connected to {ActiveCOMName}. " +
+                    $"Baud: {SerialPort.BaudRate} | " +
+                    $"DataBits: {SerialPort.DataBits} | " +
+                    $"StopBits: {SerialPort.StopBits}");
                 ConnectDisconnectButtonContent = "Disconnect";
                 WriteExtraBufferData();
             }
@@ -330,9 +335,9 @@ namespace SerialCommunicator.ViewModels
                             MessageReceived(ReadRawText());
                         }
                     }
-                    catch (TimeoutException)
+                    catch (TimeoutException t)
                     {
-                        ErrorMessage($"Received message has timed out.");
+                        ErrorMessage($"Received message has timed out: {t.Message}");
                     }
                     catch (Exception ee)
                     {
@@ -407,18 +412,27 @@ namespace SerialCommunicator.ViewModels
         //thread safe
         public void AddReceivedMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() => ReceivedMessages.Insert(0, new SerialMessage(message)));
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
+                ReceivedMessages.Insert(0, new SerialMessage(message));
+            });
         }
         //thread safe
         public void AddSentMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() => SentMessages.Insert(0, new SerialMessage(message)));
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (ReceivedMessages.Count >= MaxReceivableMessages) SentMessages.Clear();
+                SentMessages.Insert(0, new SerialMessage(message));
+            });
         }
         //thread safe
         public void AddErrorMessage(SerialMessageModel message)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
                 ReceivedMessages.Insert(0, new SerialMessage(message)
                 {
                     Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
@@ -430,6 +444,7 @@ namespace SerialCommunicator.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
                 ReceivedMessages.Insert(0, new SerialMessage(message)
                 {
                     Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
@@ -517,24 +532,48 @@ namespace SerialCommunicator.ViewModels
 
         public string ReadLine()
         {
-            int nBytesToRead = SerialPort.BytesToRead;
-            byte[] buffer = new byte[nBytesToRead];
+            //SerialPort.NewLine = "\n";
+            //return SerialPort.ReadLine();
 
-            if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
-            {
-                ErrorMessage("More data was read than what was supposed to be read.");
-            }
+            //int nBytesToRead = SerialPort.BytesToRead;
+            //byte[] buffer = new byte[nBytesToRead];
+            //
+            //if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
+            //{
+            //    ErrorMessage("More data was read than what was supposed to be read.");
+            //}
+            //
+            //string receivedData = (SerialPort.Encoding).GetString(buffer);
+            //ReceivedDataBuffer += receivedData;
+            //
+            //if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
+            //{
+            //    //takes out \n 
+            //    string received = ReceivedDataBuffer.Split('\n')[0];
+            //    ReceivedDataBuffer = "";
+            //    return received;
+            //}
 
-            string receivedData = (SerialPort.Encoding).GetString(buffer);
-            ReceivedDataBuffer += receivedData;
+            //int nBytesToRead = SerialPort.BytesToRead;
+            //byte[] buffer = new byte[nBytesToRead];
+            //
+            //if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
+            //{
+            //    ErrorMessage("More data was read than what was supposed to be read.");
+            //}
+            //
+            //string receivedData = (SerialPort.Encoding).GetString(buffer);
+            //ReceivedDataBuffer += receivedData;
 
-            if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
-            {
-                //takes out \n 
-                string received = ReceivedDataBuffer.Split('\n')[0];
-                ReceivedDataBuffer = "";
-                return received;
-            }
+            string receivedDat = SerialPort.ReadTo("\n");
+            return receivedDat.TrimEnd();
+            //if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
+            //{
+            //    //takes out \n 
+            //    string received = ReceivedDataBuffer.Split('\n')[0];
+            //    ReceivedDataBuffer = "";
+            //    return received;
+            //}
 
             return "";
         }
@@ -603,7 +642,7 @@ namespace SerialCommunicator.ViewModels
             UpdateReceiveTimeout(int.Parse(Math.Round(ReceiveTimeout, 0).ToString()));
             UpdateBufferSize(int.Parse(Math.Round(BufferSize, 0).ToString()));
             UpdateCOMName(COMName);
-            UpdateBaudRate(int.Parse(Math.Round(double.Parse(DataBits), 0).ToString()));
+            UpdateBaudRate(int.Parse(Math.Round(double.Parse(BaudRate), 0).ToString()));
             UpdateDataBits(int.Parse(Math.Round(double.Parse(DataBits), 0).ToString()));
             UpdateStopBits(StopBits);
             UpdateParity(Parity);
@@ -632,10 +671,6 @@ namespace SerialCommunicator.ViewModels
             if (!SerialPort.IsOpen) SerialPort.ReadTimeout = newVal;
         }
         private void UpdateBufferSize(int newVal)
-        {
-            if (!SerialPort.IsOpen) SerialPort.ReadBufferSize = newVal; SerialPort.WriteBufferSize = newVal;
-        }
-        private void UpdateMaxReceivableMessages(int newVal)
         {
             if (!SerialPort.IsOpen) SerialPort.ReadBufferSize = newVal; SerialPort.WriteBufferSize = newVal;
         }
@@ -672,9 +707,17 @@ namespace SerialCommunicator.ViewModels
         }
         private void UpdateDTR(bool newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.DtrEnable = newVal;
+            SerialPort.DtrEnable = newVal;
         }
 
         #endregion
+
+        /// <summary>
+        /// Use when removing SerialItems. if you dont use this, an open SerialPort would still remain open.
+        /// </summary>
+        public void ShutdownEverything()
+        {
+            RestartSerialPort();
+        }
     }
 }

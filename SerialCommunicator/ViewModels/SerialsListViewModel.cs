@@ -73,6 +73,8 @@ namespace SerialCommunicator.ViewModels
 
         public void RemoveSerialItem(SerialItem item)
         {
+            if (item.SerialView != null)
+                item.SerialView.ShutdownEverything();
             SerialItems.Remove(item);
         }
     }
