@@ -46,8 +46,6 @@ namespace SerialCommunicator.ViewModels
             };
 
             GraphTimer.Tick += GraphTimer_Tick;
-
-            StartPlotting();
         }
         private Stopwatch GraphStopWatch = new Stopwatch();
         private void GraphTimer_Tick(object sender, EventArgs e)
@@ -58,6 +56,7 @@ namespace SerialCommunicator.ViewModels
         {
             GraphStopWatch = new Stopwatch();
             GraphStopWatch.Start();
+            Controller.Clear();
             GraphTimer.Start();
         }
 

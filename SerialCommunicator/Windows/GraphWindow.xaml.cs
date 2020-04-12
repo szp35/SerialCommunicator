@@ -32,7 +32,7 @@ namespace SerialCommunicator.Windows
             GraphView = new GraphWindowViewModel();
             DataContext = GraphView;
 
-            ShowWindowCommand = new Command(Show);
+            ShowWindowCommand = new Command(ShowWindow);
 
             this.Closing += GraphWindow_Closing;
         }
@@ -40,7 +40,14 @@ namespace SerialCommunicator.Windows
         private void GraphWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
+            GraphView.StopPlotting();
             this.Hide();
+        }
+
+        public void ShowWindow()
+        {
+            Show();
+            GraphView.StartPlotting();
         }
     }
 }

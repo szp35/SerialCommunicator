@@ -53,7 +53,6 @@ namespace SerialCommunicator.ViewModels
             SerialsList.MessageReceivedCallback = SerialMessageReceived;
             Help = new HelpViewModel();
             GraphWindow = new GraphWindow();
-            GraphWindow.Show();
             //SerialsList.ItemChanged = SelectedSerialItemChanged;
             RefreshCOMPorts();
         }
