@@ -152,6 +152,7 @@ namespace SerialCommunicator.ViewModels
         }
         #endregion
 
+        public Action<string> MessageReceivedCallback { get; set; }
         public string ReceivedDataBuffer { get; set; }
 
         private TransceiveSettingsViewModel _settings = new TransceiveSettingsViewModel();
@@ -325,16 +326,23 @@ namespace SerialCommunicator.ViewModels
                         {
                             string dataReceived = ReadLine();
                             if (!string.IsNullOrEmpty(dataReceived))
+                            {
                                 MessageReceived(dataReceived);
+                                MessageReceivedCallback?.Invoke(dataReceived);
+                            }
                             //MessageReceived(SerialPort.ReadLine());
                         }
                         else if (Settings.ReceiveWithCustomTag)
                         {
-                            MessageReceived(SerialPort.ReadTo(Settings.CustomTag));
+                            string dataReceived = SerialPort.ReadTo(Settings.CustomTag);
+                            MessageReceived(dataReceived);
+                            MessageReceivedCallback?.Invoke(dataReceived);
                         }
                         else if (Settings.ReceiveWithNothingElse)
                         {
-                            MessageReceived(ReadRawText());
+                            string dataReceived = ReadRawText();
+                            MessageReceived(dataReceived);
+                            MessageReceivedCallback?.Invoke(dataReceived);
                         }
                     }
                     catch (TimeoutException t)

@@ -1,4 +1,5 @@
 ﻿using SerialCommunicator.ViewModels;
+using SerialCommunicator.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace SerialCommunicator
         {
             InitializeComponent();
         }
+
         private bool SettingsMenuShowing;
         private void AutoShowMenu(object sender, RoutedEventArgs e)
         {

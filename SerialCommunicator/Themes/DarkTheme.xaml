@@ -1818,11 +1818,11 @@
                                           FlowDirection="LeftToRight" Margin="3"
                                           Visibility="Collapsed" VerticalAlignment="Center"/>
                             <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" 
-                                                      Content="{TemplateBinding Header}" Grid.Column="1"
-                                                      ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
-                                                      ContentSource="Header" Margin="{TemplateBinding Padding}" 
-                                                      RecognizesAccessKey="True" 
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                              Content="{TemplateBinding Header}" Grid.Column="1"
+                                              ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
+                                              ContentSource="Header" Margin="{TemplateBinding Padding}" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             <Popup x:Name="PART_Popup"
                                            AllowsTransparency="True" 
                                            Focusable="False" 

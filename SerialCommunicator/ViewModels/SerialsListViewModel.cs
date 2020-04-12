@@ -43,6 +43,7 @@ namespace SerialCommunicator.ViewModels
         //public Action<SerialItem> ItemChanged { get; set; }
         public Action ScrollReceivedIntoViewCallback { get; set; }
         public Action ScrollSentIntoViewCallback { get; set; }
+        public Action<string> MessageReceivedCallback { get; set; }
 
         public ICommand NewSerialItem { get; set; }
         public ICommand RemoveSerialItemCommand { get; set; }
@@ -57,6 +58,7 @@ namespace SerialCommunicator.ViewModels
         {
             SerialItem item = new SerialItem($"Serial {SerialItems.Count}");
             item.Close = this.RemoveSerialItem;
+            item.SerialView.MessageReceivedCallback = this.MessageReceivedCallback;
             AddSerialItem(item);
         }
 

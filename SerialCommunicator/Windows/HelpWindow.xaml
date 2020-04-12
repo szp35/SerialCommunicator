@@ -7,7 +7,7 @@
         WindowStyle="SingleBorderWindow"
         Style="{DynamicResource CustomWindowStyle}"
         mc:Ignorable="d" Closing="Window_Closing"
-        Title="HelpWindow" Height="500" Width="800">
+        Title="HelpWindow" Height="576" Width="850">
     <Grid>
         <ScrollViewer>
             <StackPanel Margin="10">
@@ -22,6 +22,9 @@
                 <TextBlock HorizontalAlignment="Center" Text="The huge heap of controls at the bottom contorl the serial port (they're all binded to the selected SerialItem as mentioned before)." TextWrapping="Wrap" FontSize="20" TextAlignment="Center"/>
                 <Separator Margin="5"/>
                 <TextBlock HorizontalAlignment="Center" Text="You can save all the sent/received messages to a file by clicking Message Logging > Write Messages to File at the top and specifying a location." TextWrapping="Wrap" FontSize="20" TextAlignment="Center"/>
+                <Separator Margin="5"/>
+                <TextBlock HorizontalAlignment="Center" 
+                           Text="The Graph. Currently, the graph combines the received text from every serialport. if you're constantly receiving data from 2 serial ports, both of their data will be combined into the graph. this will be changed eventually." TextWrapping="Wrap" FontSize="20" TextAlignment="Center"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

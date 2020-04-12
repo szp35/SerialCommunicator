@@ -1,5 +1,6 @@
 ﻿using SerialCommunicator.Controls;
 using SerialCommunicator.Utilities;
+using SerialCommunicator.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace SerialCommunicator.ViewModels
 {
@@ -37,6 +39,7 @@ namespace SerialCommunicator.ViewModels
 
         public SerialsListViewModel SerialsList { get; set; }
         public HelpViewModel Help { get; set; }
+        public GraphWindow GraphWindow { get; set; }
 
         public MainViewModel()
         {
@@ -47,7 +50,10 @@ namespace SerialCommunicator.ViewModels
             ResetSerialViewCommand = new Command(ResetSerialView);
 
             SerialsList = new SerialsListViewModel();
+            SerialsList.MessageReceivedCallback = SerialMessageReceived;
             Help = new HelpViewModel();
+            GraphWindow = new GraphWindow();
+            GraphWindow.Show();
             //SerialsList.ItemChanged = SelectedSerialItemChanged;
             RefreshCOMPorts();
         }
@@ -70,6 +76,17 @@ namespace SerialCommunicator.ViewModels
         //    else
         //        SerialView = null;
         //}
+
+        public void SerialMessageReceived(string message)
+        {
+            int sizeCounter = 0;
+            foreach(char letter in message)
+            {
+                sizeCounter += CharAlphabeticalPositions.CharToAlphabeticalPosition(letter);
+            }
+
+            Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+        }
 
         public void ResetSerialView()
         {

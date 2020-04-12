@@ -93,6 +93,9 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
+                    <MenuItem Header="Graph">
+                        <MenuItem Header="Show Graph Window" Command="{Binding GraphWindow.ShowWindowCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                    </MenuItem>
                     <MenuItem Header="Message Logging">
                         <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.SelectedItem.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
