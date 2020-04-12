@@ -15,7 +15,7 @@
         MinWidth="920" MinHeight="420"
         Height="720" Width="1232" Icon="Resources/AppIcons/usbIcon.png">
     <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding SerialView.ConnectDisconnedCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding SerialsList.SelectedItem.SerialView.ConnectDisconnedCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding SerialsList.NewSerialItem}"/>
         <KeyBinding Modifiers="Ctrl" Key="X" Command="{Binding SerialsList.RemoveSerialItemCommand}"/>
     </Window.InputBindings>
@@ -87,8 +87,8 @@
                         <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
                     </MenuItem>
                     <MenuItem Header="Connection">
-                        <MenuItem Header="{Binding SerialView.ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" 
-                                  Command="{Binding SerialView.ConnectDisconnedCommand}" InputGestureText="Ctrl + E" Template="{DynamicResource DropDownMenuItemTemplate}">
+                        <MenuItem Header="{Binding SerialsList.SelectedItem.SerialView.ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" 
+                                  Command="{Binding SerialsList.SelectedItem.SerialView.ConnectDisconnedCommand}" InputGestureText="Ctrl + E" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/AppIcons/connectIcon.png"/>
                             </MenuItem.Icon>
@@ -107,8 +107,8 @@
                 </Menu>
                 <Grid Height="32" VerticalAlignment="Top" Margin="183,0,0,0">
                     <Label Content="Connected:" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,89,0" Height="32"/>
-                    <Label Content="{Binding SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,45,0" Height="32"/>
-                    <Label Content="{Binding SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                    <Label Content="{Binding SerialsList.SelectedItem.SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,45,0" Height="32"/>
+                    <Label Content="{Binding SerialsList.SelectedItem.SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
                     <Grid HorizontalAlignment="Right" Width="35" Margin="0 5 5 0">
                         <Button Click="AutoShowMenu" HorizontalAlignment="Right" Width="35" Background="Transparent" BorderBrush="Transparent">
                             <Image Source="Resources/AppIcons/menuIcon.png"/>
@@ -122,7 +122,7 @@
                         <RowDefinition Height="180" MinHeight="160" MaxHeight="225"/>
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0" Margin="0,0,0,3">
-                        <StackPanel DataContext="{Binding SerialView.Settings, UpdateSourceTrigger=PropertyChanged}" 
+                        <StackPanel DataContext="{Binding SerialsList.SelectedItem.SerialView.Settings, UpdateSourceTrigger=PropertyChanged}" 
                                     x:Name="SettingsMenu" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="0">
                             <Label Content="Transceive Filtering" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                             <Label Content="DONT CHECK MORE THAN 1 SEND/RECEIVE" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Top"
@@ -170,16 +170,22 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Button BorderBrush="{DynamicResource ControlDarkerBorderBrush}" Command="{Binding SerialsList.NewSerialItem}">
-                                        <Image Margin="3" Source="Resources/AppIcons/addIcon.png"/>
+                                        <Grid>
+                                            <Image Width="16" Source="Resources/AppIcons/addIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Add" Margin="20 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Button>
                                     <Button BorderBrush="{DynamicResource ControlDarkerBorderBrush}" Command="{Binding SerialsList.RemoveSerialItemCommand}" Grid.Column="1">
-                                        <Image Margin="3" Source="Resources/AppIcons/deleteIcon.png"/>
+                                        <Grid>
+                                            <Image Width="16" Source="Resources/AppIcons/deleteIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Remove" Margin="20 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Grid>
                                     </Button>
                                 </Grid>
                             </Grid>
                             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-                            <Grid Grid.Column="2" IsEnabled="{Binding SerialView, Converter={StaticResource ObjNullToBool}}" Margin="3,0,0,0">
-                                <Grid DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
+                            <Grid Grid.Column="2" IsEnabled="{Binding SerialsList.SelectedItem.SerialView, Converter={StaticResource ObjNullToBool}}" Margin="3,0,0,0">
+                                <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
                                     <Grid Margin="0,0,0,37">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="5*" MinWidth="332"/>
@@ -240,10 +246,10 @@
                         </Grid>
                     </DockPanel>
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Grid Grid.Row="2" IsEnabled="{Binding SerialView, Converter={StaticResource ObjNullToBool}}" Margin="0,3,0,0">
+                    <Grid Grid.Row="2" IsEnabled="{Binding SerialsList.SelectedItem.SerialView, Converter={StaticResource ObjNullToBool}}" Margin="0,3,0,0">
                         <Border Background="{DynamicResource ContainerBackground}" BorderThickness="1" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
                         <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="175">
-                            <Grid DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,7,54">
+                            <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,7,54">
                                 <Label Content="Connect to:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <TextBox Text="{Binding SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
                                          Padding="4" Margin="71,0,0,0" VerticalAlignment="Top"
@@ -258,7 +264,7 @@
                                     </Grid>
                                 </Button>
                             </Grid>
-                            <CheckBox IsChecked="{Binding SerialView.DataTerminalReady, UpdateSourceTrigger=PropertyChanged}" 
+                            <CheckBox IsChecked="{Binding SerialsList.SelectedItem.SerialView.DataTerminalReady, UpdateSourceTrigger=PropertyChanged}" 
                                       Content="DTR"  VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                       Height="22" Margin="0,0,0,28" Width="45"
                                       ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')"/>
@@ -266,7 +272,7 @@
                                     Command="{Binding ResetSerialViewCommand}"
                                     Margin="45,0,7,28"
                                     ToolTip="Sometimes a bug that cant be fixed happens. Reset the SerialPort to hopefully fix it. WARNING: WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC" Height="22" VerticalAlignment="Bottom"/>
-                            <ProgressBar IsIndeterminate="{Binding SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" Height="24" VerticalAlignment="Bottom" Margin="0,0,7,0"/>
+                            <ProgressBar IsIndeterminate="{Binding SerialsList.SelectedItem.SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" Height="24" VerticalAlignment="Bottom" Margin="0,0,7,0"/>
                             <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Right" Margin="0"/>
                         </Grid>
                         <Grid Margin="190,10,10,10">
@@ -276,7 +282,7 @@
                                 <ColumnDefinition MinWidth="500" Width="150*"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" Margin="0,0,4,0">
-                                <Grid DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="104">
+                                <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Width="104">
                                     <Label Content="Sent:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                     <Label Content="Received:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,26,0,0"/>
                                     <Label Content="{Binding SentMessages.Count, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Margin="60,0,0,0"/>
@@ -297,7 +303,7 @@
                                                    Margin="16,2,16,0"/>
                                     </Grid>
                                 </Grid>
-                                <Grid Margin="109,0,0,0" DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}">
+                                <Grid Margin="109,0,0,0" DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}">
                                     <Label Content="Timeouts" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,26,0,0" VerticalAlignment="Top">
                                         <Label Content="Read" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -349,12 +355,12 @@
                                 <Label Content="Parity" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="4"/>
                                 <Label Content="HandShakes" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="5"/>
 
-                                <ListBox SelectedItem="{Binding SerialView.COMName, UpdateSourceTrigger=PropertyChanged}"   ItemsSource="{Binding AvaliableCOMPorts, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Margin="0,26,4,24" BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1 0"/>
-                                <ListBox SelectedItem="{Binding SerialView.BaudRate, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource BaudRateList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="0,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
-                                <ListBox SelectedItem="{Binding SerialView.DataBits, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource DataBitsList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Margin="2,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
-                                <ListBox SelectedItem="{Binding SerialView.StopBits, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource StopBitsList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="3" Margin="2,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
-                                <ListBox SelectedItem="{Binding SerialView.Parity, UpdateSourceTrigger=PropertyChanged}"    ItemsSource="{Binding Source={StaticResource ParityValues}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="4" Margin="2,26,0,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
-                                <ListBox SelectedItem="{Binding SerialView.HandShake, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource HandshakeValues}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5" Margin="4,26,0,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.COMName, UpdateSourceTrigger=PropertyChanged}"   ItemsSource="{Binding AvaliableCOMPorts, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Margin="0,26,4,24" BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1 0"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.BaudRate, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource BaudRateList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Margin="0,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.DataBits, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource DataBitsList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Margin="2,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.StopBits, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Source={StaticResource StopBitsList}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="3" Margin="2,26,2,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.Parity, UpdateSourceTrigger=PropertyChanged}"    ItemsSource="{Binding Source={StaticResource ParityValues}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="4" Margin="2,26,0,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                                <ListBox SelectedItem="{Binding SerialsList.SelectedItem.SerialView.HandShake, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Source={StaticResource HandshakeValues}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5" Margin="4,26,0,0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
                             </Grid>
                         </Grid>
                     </Grid>

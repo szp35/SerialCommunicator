@@ -175,7 +175,6 @@ namespace SerialCommunicator.ViewModels
             WriteMessagesToFileCommand = new Command(WriteMessagesToFile);
 
             RestartSerialPort();
-            SerialPort.NewLine = "\n";
             Settings = new TransceiveSettingsViewModel();
 
             // 0.5 seconds, is relatively reasonable.
@@ -305,6 +304,7 @@ namespace SerialCommunicator.ViewModels
             if (SerialPort != null)
                 SerialPort.Dispose();
             SerialPort = new SerialPort();
+            SerialPort.NewLine = "\n";
             SerialPort.DataReceived += SerialPort_DataReceived;
             SerialPort.ErrorReceived += SerialPort_ErrorReceived;
         }
@@ -323,7 +323,9 @@ namespace SerialCommunicator.ViewModels
                     {
                         if (Settings.ReceiveWithNewLine)
                         {
-                            MessageReceived(ReadLine());
+                            string dataReceived = ReadLine();
+                            if (!string.IsNullOrEmpty(dataReceived))
+                                MessageReceived(dataReceived);
                             //MessageReceived(SerialPort.ReadLine());
                         }
                         else if (Settings.ReceiveWithCustomTag)
@@ -388,7 +390,7 @@ namespace SerialCommunicator.ViewModels
         //all thread safe
         public void BufferMessage(string message) => AddAutomaticMessage("Buffer", message);
         public void AlertMessage(string message) => AddAutomaticMessage("Alert", message);
-        public void ErrorMessage(string errMessage) => AddAutomaticMessage("Error", errMessage);
+        public void ErrorMessage(string message) => AddAutomaticMessage("Error", message);
         public void MessageReceived(string message) => AddAutomaticMessage("RX", message);
         public void MessageSent(string message) => AddAutomaticMessage("TX", message);
         //thread safe
@@ -535,24 +537,28 @@ namespace SerialCommunicator.ViewModels
             //SerialPort.NewLine = "\n";
             //return SerialPort.ReadLine();
 
-            //int nBytesToRead = SerialPort.BytesToRead;
-            //byte[] buffer = new byte[nBytesToRead];
-            //
-            //if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
-            //{
-            //    ErrorMessage("More data was read than what was supposed to be read.");
-            //}
-            //
-            //string receivedData = (SerialPort.Encoding).GetString(buffer);
-            //ReceivedDataBuffer += receivedData;
-            //
-            //if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
-            //{
-            //    //takes out \n 
-            //    string received = ReceivedDataBuffer.Split('\n')[0];
-            //    ReceivedDataBuffer = "";
-            //    return received;
-            //}
+            int nBytesToRead = SerialPort.BytesToRead;
+            byte[] buffer = new byte[nBytesToRead];
+            
+            if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
+            {
+                ErrorMessage("More data was read than what was supposed to be read.");
+            }
+            
+            string receivedData = (SerialPort.Encoding).GetString(buffer);
+            ReceivedDataBuffer += receivedData;
+            
+            if (ReceivedDataBuffer.EndsWith("\n"))
+            {
+                string received = ReceivedDataBuffer.Split('\n')[0];
+                ReceivedDataBuffer = "";
+                if (!string.IsNullOrEmpty(received))
+                    return received;
+                else
+                    return null;
+            }
+
+            return null;
 
             //int nBytesToRead = SerialPort.BytesToRead;
             //byte[] buffer = new byte[nBytesToRead];
@@ -565,8 +571,8 @@ namespace SerialCommunicator.ViewModels
             //string receivedData = (SerialPort.Encoding).GetString(buffer);
             //ReceivedDataBuffer += receivedData;
 
-            string receivedDat = SerialPort.ReadTo("\n");
-            return receivedDat.TrimEnd();
+            //string receivedDat = SerialPort.ReadLine();
+            //return receivedDat.TrimEnd();
             //if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
             //{
             //    //takes out \n 
@@ -574,8 +580,6 @@ namespace SerialCommunicator.ViewModels
             //    ReceivedDataBuffer = "";
             //    return received;
             //}
-
-            return "";
         }
 
         public string ReadWithCustomTag()

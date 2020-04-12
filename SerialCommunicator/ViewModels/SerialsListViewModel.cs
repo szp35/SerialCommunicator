@@ -19,14 +19,14 @@ namespace SerialCommunicator.ViewModels
             set => RaisePropertyChanged(ref _serialItems, value);
         }
 
-        private SerialItem _selectedItem = new SerialItem("");
+        private SerialItem _selectedItem;
         public SerialItem SelectedItem
         {
             get => _selectedItem;
             set
             {
                 RaisePropertyChanged(ref _selectedItem, value);
-                ItemChanged?.Invoke(value);
+                //ItemChanged?.Invoke(value);
             }
         }
 
@@ -40,7 +40,7 @@ namespace SerialCommunicator.ViewModels
             }
         }
 
-        public Action<SerialItem> ItemChanged { get; set; }
+        //public Action<SerialItem> ItemChanged { get; set; }
         public Action ScrollReceivedIntoViewCallback { get; set; }
         public Action ScrollSentIntoViewCallback { get; set; }
 

@@ -9,9 +9,6 @@
              HorizontalContentAlignment="Stretch"
              mc:Ignorable="d" Background="Transparent"
              d:DesignHeight="54" d:DesignWidth="150">
-    <UserControl.DataContext>
-        <viewmodels:SerialViewModel/>
-    </UserControl.DataContext>
     <Grid>
         <Label Content="{Binding SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
                    Background="Transparent"

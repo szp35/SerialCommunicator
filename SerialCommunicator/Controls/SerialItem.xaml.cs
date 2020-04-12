@@ -22,11 +22,13 @@ namespace SerialCommunicator.Controls
     public partial class SerialItem : UserControl
     {
         public Action<SerialItem> Close { get; set; }
-        public SerialViewModel SerialView { get => DataContext as SerialViewModel; }
+        public SerialViewModel SerialView { get; set; }
 
         public SerialItem(string name)
         {
             InitializeComponent();
+            SerialView = new SerialViewModel();
+            DataContext = SerialView;
             SerialView.SerialItemName = name;
         }
 
