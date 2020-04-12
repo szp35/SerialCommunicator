@@ -721,7 +721,8 @@ namespace SerialCommunicator.ViewModels
         /// </summary>
         public void ShutdownEverything()
         {
-            RestartSerialPort();
+            if (SerialPort != null)
+                SerialPort.Dispose();
         }
     }
 }
