@@ -19,10 +19,7 @@ namespace SerialCommunicator.SerialFileLogger
                 formattedMessages.Add($"{message.RXorTX} >> {message.Message} || {message.Time}");
             }
 
-            if (File.Exists(filePath))
-                File.WriteAllLines(filePath, formattedMessages.ToArray());
-            else
-                throw new FileNotFoundException("File does not exist, couldn't write messages to file", filePath);
+            File.WriteAllLines(filePath, formattedMessages.ToArray());
         }
     }
 }

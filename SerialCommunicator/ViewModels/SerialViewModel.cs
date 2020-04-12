@@ -1,6 +1,9 @@
-﻿using SerialCommunicator.Controls;
+﻿using Microsoft.Win32;
+using SerialCommunicator.Controls;
+using SerialCommunicator.SerialFileLogger;
 using SerialCommunicator.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Text;
@@ -20,6 +23,7 @@ namespace SerialCommunicator.ViewModels
         public ICommand ClearBuffersCommand { get; set; }
         public ICommand SendMessageCommand { get; set; }
         public ICommand ResetSerialPortCommand { get; set; }
+        public ICommand WriteMessagesToFileCommand { get; set; }
         #endregion
 
         #region Private Fields
@@ -168,6 +172,7 @@ namespace SerialCommunicator.ViewModels
             ClearSentMessagesCommand = new Command(ClearSentMessages);
             ClearBuffersCommand = new Command(ClearBuffers);
             ResetSerialPortCommand = new Command(RestartSerialPort);
+            WriteMessagesToFileCommand = new Command(WriteMessagesToFile);
 
             RestartSerialPort();
             Settings = new TransceiveSettingsViewModel();
@@ -188,6 +193,31 @@ namespace SerialCommunicator.ViewModels
             ConnectDisconnectButtonContent = "Connect";
 
             UpdateSerialValues();
+        }
+
+        #endregion
+
+        #region File logging/writing of messages
+
+        public void WriteMessagesToFile()
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            sfd.FileName = "serialLog1";
+            sfd.Title = "Select a location to save every sent/received message to (as a txt)";
+            sfd.Filter = "Text File|*.txt";
+            if (sfd.ShowDialog() == true)
+            {
+                List<SerialMessageModel> messages = new List<SerialMessageModel>();
+                foreach (SerialMessage item in ReceivedMessages)
+                    if (item.DataContext is SerialMessageModel message)
+                        messages.Add(message);
+                foreach (SerialMessage item in SentMessages)
+                    if (item.DataContext is SerialMessageModel message)
+                        messages.Add(message);
+
+                MessageWriter.WriteToFile(sfd.FileName, messages);
+            }
         }
 
         #endregion

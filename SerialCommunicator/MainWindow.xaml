@@ -15,7 +15,9 @@
         MinWidth="920" MinHeight="420"
         Height="720" Width="1232" Icon="Resources/AppIcons/usbIcon.png">
     <Window.InputBindings>
-        <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding SerialView.ConnectDisconnedCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding SerialView.ConnectDisconnedCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="A" Command="{Binding SerialsList.NewSerialItem}"/>
+        <KeyBinding Modifiers="Ctrl" Key="X" Command="{Binding SerialsList.RemoveSerialItemCommand}"/>
     </Window.InputBindings>
     <Window.DataContext>
         <viewmodels:MainViewModel/>
@@ -69,41 +71,45 @@
             <Grid>
                 <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
                     <MenuItem Header="File">
-                        <MenuItem Header="Add New SerialPort" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                        <MenuItem Header="Add New SerialPort" Command="{Binding SerialsList.NewSerialItem}"
+                                  InputGestureText="Ctrl + A" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/AppIcons/addIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Remove SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                        <MenuItem Header="Remove SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}"
+                                  InputGestureText="Ctrl + X" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/AppIcons/removeIcon.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator Style="{DynamicResource SeparatorStyle1}"/>
-                        <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
-                            <MenuItem.Icon>
-                                <Image Source="Resources/AppIcons/writeFileIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator Style="{DynamicResource SeparatorStyle1}"/>
                         <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
                     </MenuItem>
                     <MenuItem Header="Connection">
-                        <MenuItem Header="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                        <MenuItem Header="{Binding SerialView.ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" 
+                                  Command="{Binding SerialView.ConnectDisconnedCommand}" InputGestureText="Ctrl + E" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/AppIcons/connectIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
+                    <MenuItem Header="Message Logging">
+                        <MenuItem Header="Write Messages to File" Command="{Binding SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                            <MenuItem.Icon>
+                                <Image Source="Resources/AppIcons/writeFileIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
                     <MenuItem Header="Help">
-                        <MenuItem Header="Help Window" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                        <MenuItem Header="Help Window (not added yet)" Template="{DynamicResource DropDownMenuItemTemplate}"/>
                     </MenuItem>
                 </Menu>
-                <Grid Height="32" VerticalAlignment="Top" Margin="205,0,0,0">
-                    <Label Content="Connected:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0"/>
-                    <Label Content="{Binding SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="90,0,0,0"/>
+                <Grid Height="32" VerticalAlignment="Top" Margin="183,0,0,0">
+                    <Label Content="Connected:" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,89,0" Height="32"/>
+                    <Label Content="{Binding SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,45,0" Height="32"/>
                     <Label Content="{Binding SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
-                    <Grid HorizontalAlignment="Right" Width="132" Margin="0 5 5 0">
+                    <Grid HorizontalAlignment="Right" Width="35" Margin="0 5 5 0">
                         <Button Click="AutoShowMenu" HorizontalAlignment="Right" Width="35" Background="Transparent" BorderBrush="Transparent">
                             <Image Source="Resources/AppIcons/menuIcon.png"/>
                         </Button>
