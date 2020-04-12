@@ -94,7 +94,7 @@
                         </MenuItem>
                     </MenuItem>
                     <MenuItem Header="Message Logging">
-                        <MenuItem Header="Write Messages to File" Command="{Binding SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                        <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.SelectedItem.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/AppIcons/writeFileIcon.png"/>
                             </MenuItem.Icon>
