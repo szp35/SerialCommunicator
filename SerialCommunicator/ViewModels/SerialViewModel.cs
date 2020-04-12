@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SerialCommunicator.ViewModels
 {
@@ -223,6 +224,10 @@ namespace SerialCommunicator.ViewModels
             {
                 ErrorMessage($"Failed to connect to port: {e.Message}");
             }
+            finally
+            {
+                SetWaitingStatus(false);
+            }
         }
 
         public void Disconnect()
@@ -245,6 +250,10 @@ namespace SerialCommunicator.ViewModels
             catch (Exception e)
             {
                 ErrorMessage($"Failed to disconnect from port: {e.Message}");
+            }
+            finally
+            {
+                SetWaitingStatus(false);
             }
         }
 
@@ -282,13 +291,13 @@ namespace SerialCommunicator.ViewModels
                             MessageReceived(ReadLine());
                             //MessageReceived(SerialPort.ReadLine());
                         }
-                        else if (Settings.ReceiveWithNothingElse)
-                        {
-                            MessageReceived(ReadRawText());
-                        }
                         else if (Settings.ReceiveWithCustomTag)
                         {
                             MessageReceived(SerialPort.ReadTo(Settings.CustomTag));
+                        }
+                        else if (Settings.ReceiveWithNothingElse)
+                        {
+                            MessageReceived(ReadRawText());
                         }
                     }
                     catch (TimeoutException)
@@ -355,25 +364,46 @@ namespace SerialCommunicator.ViewModels
         //thread safe
         public void AddAutomaticMessage(SerialMessageModel message)
         {
-            if (message.RXorTX == "TX")
-                AddSentMessage(message);
-            else
-                AddReceivedMessage(message);
+            switch (message.RXorTX)
+            {
+                case "Buffer": AddSentMessage(message); break;
+                case "Alert": AddAlertMessage(message); break;
+                case "Error": AddErrorMessage(message); break;
+                case "RX": AddReceivedMessage(message); break;
+                case "TX": AddSentMessage(message); break;
+                default: AddReceivedMessage(message); break;
+            }
         }
         //thread safe
         public void AddReceivedMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ReceivedMessages.Insert(0, new SerialMessage(message));
-            });
+            Application.Current.Dispatcher.Invoke(() => ReceivedMessages.Insert(0, new SerialMessage(message)));
         }
         //thread safe
         public void AddSentMessage(SerialMessageModel message)
         {
+            Application.Current.Dispatcher.Invoke(() => SentMessages.Insert(0, new SerialMessage(message)));
+        }
+        //thread safe
+        public void AddErrorMessage(SerialMessageModel message)
+        {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SentMessages.Insert(0, new SerialMessage(message));
+                ReceivedMessages.Insert(0, new SerialMessage(message)
+                {
+                    Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
+                });
+            });
+        }
+        //thread safe
+        public void AddAlertMessage(SerialMessageModel message)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ReceivedMessages.Insert(0, new SerialMessage(message)
+                {
+                    Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
+                });
             });
         }
 
@@ -399,16 +429,28 @@ namespace SerialCommunicator.ViewModels
                         SetWaitingStatus(true);
 
                         if (Settings.SendWithNewLine)
+                        {
                             SerialPort.WriteLine(message);
+                        }
                         else if (Settings.SendWithCustomTag)
-                            SerialPort.Write($"{message}{Settings.CustomTag}");
+                        {
+                            //idc this is messy but it might work
+                            string originalTag = SerialPort.NewLine;
+                            SerialPort.NewLine = Settings.CustomTag;
+                            SerialPort.WriteLine(message);
+                            SerialPort.NewLine = originalTag;
+                        }
+                        else if (Settings.SendWithNothingElse)
+                        {
+                            SerialPort.Write(message);
+                        }
                         MessageSent(message);
 
                         SetWaitingStatus(false);
                     }
                     catch (TimeoutException t)
                     {
-                        ErrorMessage($"Send Message Timeout.");
+                        ErrorMessage($"Send Message Timeout: {t.Message}");
                     }
                     catch (Exception e)
                     {
