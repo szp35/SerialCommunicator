@@ -27,7 +27,6 @@ namespace SerialCommunicator.ViewModels
             set => RaisePropertyChanged(ref _avaliableComPorts, value);
         }
 
-        public SerialsListViewModel SerialsList { get; set; }
 
         //private SerialViewModel _serialView;
         //public SerialViewModel SerialView
@@ -35,6 +34,9 @@ namespace SerialCommunicator.ViewModels
         //    get => _serialView;
         //    set => RaisePropertyChanged(ref _serialView, value);
         //}
+
+        public SerialsListViewModel SerialsList { get; set; }
+        public HelpViewModel Help { get; set; }
 
         public MainViewModel()
         {
@@ -45,6 +47,7 @@ namespace SerialCommunicator.ViewModels
             ResetSerialViewCommand = new Command(ResetSerialView);
 
             SerialsList = new SerialsListViewModel();
+            Help = new HelpViewModel();
             //SerialsList.ItemChanged = SelectedSerialItemChanged;
             RefreshCOMPorts();
         }
@@ -70,8 +73,11 @@ namespace SerialCommunicator.ViewModels
 
         public void ResetSerialView()
         {
-            SerialsList.SelectedItem.SerialView.RestartSerialPort();
-            SerialsList.SelectedItem.SerialView = new SerialViewModel();
+            if (SerialsList.SelectedItem != null)
+            {
+                SerialsList.SelectedItem.SerialView.RestartSerialPort();
+                SerialsList.SelectedItem.SerialView = new SerialViewModel();
+            }
         }
 
         #region Window Methods

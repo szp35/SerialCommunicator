@@ -23,7 +23,6 @@
         <viewmodels:MainViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <utilities:ObjectNullToControlEnabledConverter x:Key="ObjNullToBool"/>
         <utilities:InverseBooleanConverter x:Key="InvertBoolean"/>
         <x:Array Type="sys:String" x:Key="StopBitsList">
             <sys:String>One</sys:String>
@@ -102,7 +101,7 @@
                         </MenuItem>
                     </MenuItem>
                     <MenuItem Header="Help">
-                        <MenuItem Header="Help Window (not added yet)" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                        <MenuItem Header="Show Help Window" Command="{Binding Help.ShowHelpWindowCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
                     </MenuItem>
                 </Menu>
                 <Grid Height="32" VerticalAlignment="Top" Margin="183,0,0,0">
@@ -184,7 +183,7 @@
                                 </Grid>
                             </Grid>
                             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-                            <Grid Grid.Column="2" IsEnabled="{Binding SerialsList.SelectedItem.SerialView, Converter={StaticResource ObjNullToBool}}" Margin="3,0,0,0">
+                            <Grid Grid.Column="2" Margin="3,0,0,0">
                                 <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
                                     <Grid Margin="0,0,0,37">
                                         <Grid.ColumnDefinitions>
@@ -246,7 +245,7 @@
                         </Grid>
                     </DockPanel>
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Grid Grid.Row="2" IsEnabled="{Binding SerialsList.SelectedItem.SerialView, Converter={StaticResource ObjNullToBool}}" Margin="0,3,0,0">
+                    <Grid Grid.Row="2" Margin="0,3,0,0">
                         <Border Background="{DynamicResource ContainerBackground}" BorderThickness="1" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
                         <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="175">
                             <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,7,54">
