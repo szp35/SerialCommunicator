@@ -85,7 +85,7 @@
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0" Margin="0,0,0,3">
                         <StackPanel DataContext="{Binding SerialView.Settings, UpdateSourceTrigger=PropertyChanged}" 
-                                    x:Name="SettingsMenu" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="200">
+                                    x:Name="SettingsMenu" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="0">
                             <Label Content="Transceive Filtering" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                             <Label Content="DONT CHECK MORE THAN 1 IN EACH!" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                             <StackPanel>
