@@ -446,6 +446,11 @@ namespace SerialCommunicator.ViewModels
                         }
                         MessageSent(message);
 
+                        if (Settings.ClearTBSTAfterTransmission)
+                        {
+                            ToBeSentText = "";
+                        }
+
                         SetWaitingStatus(false);
                     }
                     catch (TimeoutException t)

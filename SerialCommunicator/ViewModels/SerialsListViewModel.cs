@@ -45,10 +45,12 @@ namespace SerialCommunicator.ViewModels
         public Action ScrollSentIntoViewCallback { get; set; }
 
         public ICommand NewSerialItem { get; set; }
+        public ICommand RemoveSerialItemCommand { get; set; }
 
         public SerialsListViewModel()
         {
             NewSerialItem = new Command(CreateSerialItem);
+            RemoveSerialItemCommand = new Command(RemoveSerialItem);
         }
 
         public void CreateSerialItem()
@@ -56,6 +58,12 @@ namespace SerialCommunicator.ViewModels
             SerialItem item = new SerialItem($"Serial {SerialItems.Count}");
             item.Close = this.RemoveSerialItem;
             AddSerialItem(item);
+        }
+
+        public void RemoveSerialItem()
+        {
+            if (SelectedItem != null)
+                RemoveSerialItem(SelectedItem);
         }
 
         public void AddSerialItem(SerialItem item)

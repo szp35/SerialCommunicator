@@ -17,10 +17,21 @@
                    Background="Transparent"
                    Margin="2 2 25 0" Padding="4" 
                    VerticalAlignment="Top"/>
-        <Button Margin="0,2,2,0" VerticalAlignment="Top" HorizontalAlignment="Right" Content="X" Width="23" Height="24" Click="Button_Click"/>
+        <Button Margin="0,2,2,0" 
+                Background="Transparent"
+                VerticalAlignment="Top" HorizontalAlignment="Right" 
+                Width="23" Height="23" 
+                Click="Button_Click">
+            <Image Source="/SerialCommunicator;component/Resources/AppIcons/deleteIcon.png" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"/>
+        </Button>
         <Grid Margin="0,26,0,0">
-            <Label Content="Connected:" HorizontalAlignment="Left" Margin="2 0 0 0" VerticalAlignment="Center"/>
-            <Label Content="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" Margin="74 0 0 0" VerticalAlignment="Center"/>
+            <Label Content="Connected:" 
+                   HorizontalAlignment="Left" Margin="2 0 0 0"
+                   VerticalAlignment="Center"/>
+            <Label Content="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" 
+                   Margin="74 0 0 0" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </UserControl>

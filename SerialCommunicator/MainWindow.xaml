@@ -13,7 +13,10 @@
         Style="{DynamicResource CustomWindowStyle}"
         Title="Serial Communicator" 
         MinWidth="920" MinHeight="420"
-        Height="720" Width="1100" Icon="Resources/AppIcons/usbIcon.png">
+        Height="720" Width="1232" Icon="Resources/AppIcons/usbIcon.png">
+    <Window.InputBindings>
+        <KeyBinding Key="E" Modifiers="Ctrl" Command="{Binding SerialView.ConnectDisconnedCommand}"/>
+    </Window.InputBindings>
     <Window.DataContext>
         <viewmodels:MainViewModel/>
     </Window.DataContext>
@@ -64,20 +67,49 @@
     <Grid>
         <Grid>
             <Grid>
-                <Grid Margin="5,0,0,0" Height="40" VerticalAlignment="Top">
-                    <Grid Margin="0 5 0 5">
-                        <Button HorizontalAlignment="Left" Command="{Binding SerialsList.NewSerialItem}" Width="30">
-                            <Image Margin="2" Source="Resources/AppIcons/newFile.png"/>
-                        </Button>
-                        <Button Click="AutoShowMenu" Content="Messaging Settings" HorizontalAlignment="Right" Width="130" Margin="0,0,5,0"/>
-                    </Grid>
-                </Grid>
-                <Grid Height="40" VerticalAlignment="Top" Margin="205,0,0,0">
-                    <Label Content="Connected:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0,4"/>
+                <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <MenuItem Header="File">
+                        <MenuItem Header="Add New SerialPort" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                            <MenuItem.Icon>
+                                <Image Source="Resources/AppIcons/addIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Remove SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                            <MenuItem.Icon>
+                                <Image Source="Resources/AppIcons/removeIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator Style="{DynamicResource SeparatorStyle1}"/>
+                        <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                            <MenuItem.Icon>
+                                <Image Source="Resources/AppIcons/writeFileIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator Style="{DynamicResource SeparatorStyle1}"/>
+                        <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                    </MenuItem>
+                    <MenuItem Header="Connection">
+                        <MenuItem Header="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" Command="{Binding SerialsList.NewSerialItem}" Template="{DynamicResource DropDownMenuItemTemplate}">
+                            <MenuItem.Icon>
+                                <Image Source="Resources/AppIcons/connectIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="Help">
+                        <MenuItem Header="Help Window" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                    </MenuItem>
+                </Menu>
+                <Grid Height="32" VerticalAlignment="Top" Margin="205,0,0,0">
+                    <Label Content="Connected:" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="0"/>
                     <Label Content="{Binding SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Margin="90,0,0,0"/>
                     <Label Content="{Binding SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                    <Grid HorizontalAlignment="Right" Width="132" Margin="0 5 5 0">
+                        <Button Click="AutoShowMenu" HorizontalAlignment="Right" Width="35" Background="Transparent" BorderBrush="Transparent">
+                            <Image Source="Resources/AppIcons/menuIcon.png"/>
+                        </Button>
+                    </Grid>
                 </Grid>
-                <Grid Margin="0,40,0,0">
+                <Grid Margin="0,32,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="3"/>
@@ -87,7 +119,8 @@
                         <StackPanel DataContext="{Binding SerialView.Settings, UpdateSourceTrigger=PropertyChanged}" 
                                     x:Name="SettingsMenu" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="0">
                             <Label Content="Transceive Filtering" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                            <Label Content="DONT CHECK MORE THAN 1 IN EACH!" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            <Label Content="DONT CHECK MORE THAN 1 SEND/RECEIVE" FontSize="9" HorizontalAlignment="Center" VerticalAlignment="Top"
+                                   ToolTip="Dont clicked multiple [send with/receive with] checkboxes, otherwise the topmost checked one will be applied."/>
                             <StackPanel>
                                 <CheckBox IsChecked="{Binding SendWithNewLine, UpdateSourceTrigger=PropertyChanged}"     Margin="0 0 0 2" Content="Send with NewLine" VerticalAlignment="Top"/>
                                 <CheckBox IsChecked="{Binding SendWithCustomTag, UpdateSourceTrigger=PropertyChanged}"   Margin="0 0 0 2" Content="Send w/ Custom Tag" VerticalAlignment="Top"/>
@@ -98,7 +131,6 @@
                                 <CheckBox IsChecked="{Binding ReceiveWithNewLine, UpdateSourceTrigger=PropertyChanged}"     Margin="0 0 0 2" Content="Receive with NewLine" VerticalAlignment="Top"/>
                                 <CheckBox IsChecked="{Binding ReceiveWithCustomTag, UpdateSourceTrigger=PropertyChanged}"   Margin="0 0 0 2" Content="Receive w/ Custom Tag" VerticalAlignment="Top"/>
                                 <CheckBox IsChecked="{Binding ReceiveWithNothingElse, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 0 2" Content="Receive raw (no new line)" VerticalAlignment="Top"/>
-
                             </StackPanel>
                             <Separator HorizontalAlignment="Stretch" Margin="0 5 2 5"/>
                             <Grid Margin="0 2 2 2">
@@ -106,38 +138,47 @@
                                 <TextBox Text="{Binding CustomTag, UpdateSourceTrigger=PropertyChanged}" Padding="4" VerticalAlignment="Top" Margin="75,0,0,0"/>
                             </Grid>
                             <Separator HorizontalAlignment="Stretch" Margin="0 5 2 5"/>
-                            <Border Background="DarkRed" CornerRadius="5 5 0 0"  Margin="5 5 5 0">
-                                <Label Content="WARNING!" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" FontSize="16"/>
-                            </Border>
-                            <Border Margin="5 0 5 0" CornerRadius="0 0 5 5" BorderBrush="DarkRed" BorderThickness="2">
-                                <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" >
-                                    <Run Text="[Send/Receive with Custom Tag] and [Send/Receive Raw] MOST LIKELY DO WORK. Just make sure not to check more than 1 item in the Send/Receive blocks. "/><LineBreak/>
-                                    <Run Text="if you do, it will use the highest checked setting."/>
-                                    <Run Text=" (AKA SendRaw and NewLine are checked, it will send with NewLine and NOT Raw)"/>
+                            <CheckBox IsChecked="{Binding ClearTBSTAfterTransmission, UpdateSourceTrigger=PropertyChanged}" 
+                                      Margin="0,0,2,2" VerticalAlignment="Top" Height="36"
+                                      ToolTip="Clear the textbox (which holds the text that will be sent when you click enter/Send) when a message is transmitted.">
+                                <TextBlock TextWrapping="Wrap" Margin="5 0 0 0">
+                                    <Run Text="Clear [TextToBeSent] text box after sending a message"/>
                                 </TextBlock>
-                            </Border>
+                            </CheckBox>
                         </StackPanel>
-                        <Grid Margin="5,0,0,0">
+                        <Grid Margin="3,0,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="65*" MaxWidth="320"/>
+                                <ColumnDefinition Width="10*" MaxWidth="275"/>
                                 <ColumnDefinition Width="3"/>
-                                <ColumnDefinition Width="297*"/>
+                                <ColumnDefinition Width="60*"/>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column="0" Margin="0,0,3,0">
                                 <ListBox ItemsSource="{Binding SerialsList.SerialItems, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedItem="{Binding SerialsList.SelectedItem, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedIndex="{Binding SerialsList.SelectedIndex, UpdateSourceTrigger=PropertyChanged}" 
-                                         BorderBrush="{DynamicResource ControlDarkerBorderBrush}"
-                                         HorizontalContentAlignment="Stretch"/>
+                                         BorderBrush="{DynamicResource ControlDarkerBorderBrush}" BorderThickness="1 1 1 0"
+                                         HorizontalContentAlignment="Stretch" Margin="0,0,0,36"/>
+                                <Grid Height="36" VerticalAlignment="Bottom">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button BorderBrush="{DynamicResource ControlDarkerBorderBrush}" Command="{Binding SerialsList.NewSerialItem}">
+                                        <Image Margin="3" Source="Resources/AppIcons/addIcon.png"/>
+                                    </Button>
+                                    <Button BorderBrush="{DynamicResource ControlDarkerBorderBrush}" Command="{Binding SerialsList.RemoveSerialItemCommand}" Grid.Column="1">
+                                        <Image Margin="3" Source="Resources/AppIcons/deleteIcon.png"/>
+                                    </Button>
+                                </Grid>
                             </Grid>
                             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
                             <Grid Grid.Column="2" IsEnabled="{Binding SerialView, Converter={StaticResource ObjNullToBool}}" Margin="3,0,0,0">
-                                <Grid DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0">
+                                <Grid DataContext="{Binding SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
                                     <Grid Margin="0,0,0,37">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="5*" MinWidth="332"/>
                                             <ColumnDefinition Width="3"/>
-                                            <ColumnDefinition Width="4*" MinWidth="332"/>
+                                            <ColumnDefinition Width="3*" MinWidth="332"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid Grid.Column="0" Margin="0,0,3,0">
                                             <ListBox x:Name="receivedMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -145,7 +186,12 @@
                                                      ItemsSource="{Binding ReceivedMessages, UpdateSourceTrigger=PropertyChanged}" 
                                                      BorderBrush="{DynamicResource ControlDefaultBorderBrush}"
                                                      Margin="0,26,0,0"/>
-                                            <Button Command="{Binding ClearReceivedMessagesCommand}" Content="Clear" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="102"/>
+                                            <Button Command="{Binding ClearReceivedMessagesCommand}" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="102">
+                                                <Grid Width="98" Height="23">
+                                                    <Image Width="17" Source="Resources/AppIcons/removeIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                                                    <TextBlock Text="Clear" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="1,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
                                             <Label Content="Received Messages" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
@@ -159,21 +205,29 @@
                                                      Margin="0,26,0,0" HorizontalContentAlignment="Stretch"/>
                                             <Label Content="Sent Messages" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="1,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="98"/>
-                                            <Button Command="{Binding ClearSentMessagesCommand}" Content="Clear" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="100"/>
+                                            <Button Command="{Binding ClearSentMessagesCommand}" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="100">
+                                                <Grid Width="98" Height="23">
+                                                    <Image Width="17" Source="Resources/AppIcons/removeIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0"/>
+                                                    <TextBlock Text="Clear" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Button>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                             <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                         </Grid>
                                     </Grid>
-                                    <Grid IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" Height="32" VerticalAlignment="Bottom">
-                                        <TextBox TextWrapping="Wrap" Padding="4" 
+                                    <Grid IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" Height="33" VerticalAlignment="Bottom">
+                                        <Button Command="{Binding SendMessageCommand}" Content="Send" 
+                                                HorizontalAlignment="Left" Width="96" 
+                                                Background="{DynamicResource ControlDarkerBackground}" 
+                                                BorderBrush="{DynamicResource ControlDarkerBorderBrush}"/>
+                                        <TextBox TextWrapping="Wrap" Padding="4"  VerticalContentAlignment="Center"
                                              Text="{Binding ToBeSentText, UpdateSourceTrigger=PropertyChanged}"
-                                             FontSize="16" Margin="0,0,101,0" Background="Transparent" 
+                                             FontSize="16" Margin="101,0,0,0" Background="Transparent" 
                                              BorderBrush="{DynamicResource ControlDefaultBorderBrush}">
                                             <TextBox.InputBindings>
                                                 <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
                                             </TextBox.InputBindings>
                                         </TextBox>
-                                        <Button Command="{Binding SendMessageCommand}" Content="Send" HorizontalAlignment="Right" Width="96" Background="{DynamicResource ControlDarkerBackground}" BorderBrush="{DynamicResource ControlDarkerBorderBrush}"/>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -190,16 +244,24 @@
                                          Background="Transparent"/>
                                 <Label Content="On:" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top"/>
                                 <Label Content="{Binding ActiveCOMName, UpdateSourceTrigger=PropertyChanged}" Margin="28,26,0,0" VerticalAlignment="Top"/>
-                                <Button Command="{Binding ConnectDisconnedCommand}" Content="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" Margin="0,52,0,0"/>
+                                <Button Command="{Binding ConnectDisconnedCommand}" Margin="0,52,0,0">
+                                    <Grid Width="120" Height="24">
+                                        <Image Width="20" Source="Resources/AppIcons/connectIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                        <TextBlock Text="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}"
+                                                   Margin="8 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Button>
                             </Grid>
-                            <CheckBox IsChecked="{Binding SerialView.DataTerminalReady, UpdateSourceTrigger=PropertyChanged}" Content="Data Terminal Ready (DTR)" ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')" Height="20" Margin="0,0,0,30" VerticalAlignment="Bottom"/>
-                            <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Right" Margin="0,0,0,29"/>
-                            <ProgressBar IsIndeterminate="{Binding SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,105,0" Height="26" VerticalAlignment="Bottom"/>
-                            <Button Content="Reset SerialPort" HorizontalAlignment="Left" 
+                            <CheckBox IsChecked="{Binding SerialView.DataTerminalReady, UpdateSourceTrigger=PropertyChanged}" 
+                                      Content="DTR"  VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                      Height="22" Margin="0,0,0,28" Width="45"
+                                      ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')"/>
+                            <Button Content="Reset SerialPort" 
                                     Command="{Binding ResetSerialViewCommand}"
-                                    Margin="75,0,0,0" 
-                                    Width="100"
-                                    ToolTip="Sometimes a bug that cant be fixed happens. Reset the SerialPort to hopefully fix it. WARNING: WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC" Height="26" VerticalAlignment="Bottom"/>
+                                    Margin="45,0,7,28"
+                                    ToolTip="Sometimes a bug that cant be fixed happens. Reset the SerialPort to hopefully fix it. WARNING: WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC" Height="22" VerticalAlignment="Bottom"/>
+                            <ProgressBar IsIndeterminate="{Binding SerialView.WaitingStatus, UpdateSourceTrigger=PropertyChanged}" Height="24" VerticalAlignment="Bottom" Margin="0,0,7,0"/>
+                            <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Right" Margin="0"/>
                         </Grid>
                         <Grid Margin="190,10,10,10">
                             <Grid.ColumnDefinitions>
@@ -264,10 +326,15 @@
                                     <ColumnDefinition Width="120*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Button Command="{Binding RefreshCOMPortsCommand}" Content="Refresh"
+                                <Button Command="{Binding RefreshCOMPortsCommand}"
                                         VerticalAlignment="Bottom" Grid.Column="0" 
                                         Margin="0,0,4,0" Height="24"
-                                        ToolTip="Clear and fetch the avaliable COM ports again"/>
+                                        ToolTip="Clear and fetch the avaliable COM ports again">
+                                    <Grid Width="89" Height="20">
+                                        <Image Width="16" Source="Resources/AppIcons/refreshIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                        <TextBlock Text="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                    </Grid>
+                                </Button>
 
                                 <Label Content="COM Ports" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0"/>
                                 <Label Content="Baud Rate" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1"/>

@@ -71,6 +71,7 @@
     <Compile Include="Controls\SerialMessage.xaml.cs">
       <DependentUpon>SerialMessage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SerialFileLogger\MessageWriter.cs" />
     <Compile Include="Utilities\BaseViewModel.cs" />
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandParam.cs" />
@@ -154,8 +155,25 @@
     <Resource Include="usbIconIco.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\newFile.png" />
+    <Resource Include="Resources\AppIcons\removeIcon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\addIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\menuIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\writeFileIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\deleteIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\refreshIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\AppIcons\connectIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,6 +19,8 @@ namespace SerialCommunicator.ViewModels
         private bool _sendWithNothingElse;
         private bool _receiveWithNothingElse;
 
+        private bool _clearTBSTAfterTransmission;
+
         public bool SendWithNewLine
         {
             get => _sendWithNewLine;
@@ -57,10 +59,17 @@ namespace SerialCommunicator.ViewModels
             set => RaisePropertyChanged(ref _receiveWithNothingElse, value);
         }
 
+        public bool ClearTBSTAfterTransmission
+        {
+            get => _clearTBSTAfterTransmission;
+            set => RaisePropertyChanged(ref _clearTBSTAfterTransmission, value);
+        }
+
         public TransceiveSettingsViewModel()
         {
             SendWithNewLine = true;
             ReceiveWithNewLine = true;
+            ClearTBSTAfterTransmission = true;
             CustomTag = @"\n";
         }
     }
