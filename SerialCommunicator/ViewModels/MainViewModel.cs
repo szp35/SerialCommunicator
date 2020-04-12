@@ -39,7 +39,6 @@ namespace SerialCommunicator.ViewModels
 
         public SerialsListViewModel SerialsList { get; set; }
         public HelpViewModel Help { get; set; }
-        public GraphWindow GraphWindow { get; set; }
 
         public MainViewModel()
         {
@@ -50,9 +49,7 @@ namespace SerialCommunicator.ViewModels
             ResetSerialViewCommand = new Command(ResetSerialView);
 
             SerialsList = new SerialsListViewModel();
-            SerialsList.MessageReceivedCallback = SerialMessageReceived;
             Help = new HelpViewModel();
-            GraphWindow = new GraphWindow();
             //SerialsList.ItemChanged = SelectedSerialItemChanged;
             RefreshCOMPorts();
         }
@@ -75,34 +72,6 @@ namespace SerialCommunicator.ViewModels
         //    else
         //        SerialView = null;
         //}
-
-        public void SerialMessageReceived(string message)
-        {
-            int sizeCounter = 0;
-            if (IsDigitsOnly(message) && int.TryParse(message, out sizeCounter))
-            {
-                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
-            }
-            else
-            {
-                foreach (char letter in message)
-                {
-                    sizeCounter += CharAlphabeticalPositions.CharToAlphabeticalPosition(letter);
-                }
-                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
-            }
-        }
-
-        bool IsDigitsOnly(string str)
-        {
-            foreach (char c in str)
-            {
-                if (c < '0' || c > '9')
-                    return false;
-            }
-
-            return true;
-        }
 
         public void ResetSerialView()
         {

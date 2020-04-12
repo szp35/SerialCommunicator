@@ -32,7 +32,7 @@ namespace SerialCommunicator.ViewModels
             Controller.Range.MinimumY = 0;
             Controller.Range.MaximumY = 1024;
             Controller.Range.MaximumX = TimeSpan.FromSeconds(10);
-            Controller.Range.AutoY = true;
+            Controller.Range.AutoY = false;
 
             Controller.DataSeriesCollection.Add(new WpfGraphDataSeries()
             {

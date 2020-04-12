@@ -94,7 +94,10 @@
                         </MenuItem>
                     </MenuItem>
                     <MenuItem Header="Graph">
-                        <MenuItem Header="Show Graph Window" Command="{Binding GraphWindow.ShowWindowCommand}" Template="{DynamicResource DropDownMenuItemTemplate}"/>
+                        <MenuItem Header="Show Graph Window" 
+                                  Command="{Binding SerialsList.SelectedItem.SerialView.GraphWindow.ShowWindowCommand}" 
+                                  Template="{DynamicResource DropDownMenuItemTemplate}"
+                                  ToolTip="Open a graph that is linked to the received messages of a selected serial port."/>
                     </MenuItem>
                     <MenuItem Header="Message Logging">
                         <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.SelectedItem.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource DropDownMenuItemTemplate}">
@@ -120,10 +123,10 @@
                 <Grid Margin="0,32,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="3"/>
+                        <RowDefinition Height="2"/>
                         <RowDefinition Height="180" MinHeight="160" MaxHeight="225"/>
                     </Grid.RowDefinitions>
-                    <DockPanel Grid.Row="0" Margin="0,0,0,3">
+                    <DockPanel Grid.Row="0" Margin="0,0,0,2">
                         <StackPanel DataContext="{Binding SerialsList.SelectedItem.SerialView.Settings, UpdateSourceTrigger=PropertyChanged}" 
                                     x:Name="SettingsMenu" DockPanel.Dock="Right" HorizontalAlignment="Right" Width="0">
                             <Label Content="Transceive Filtering" HorizontalAlignment="Center" VerticalAlignment="Top"/>
@@ -156,11 +159,11 @@
                         </StackPanel>
                         <Grid Margin="3,0,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10*" MaxWidth="275"/>
-                                <ColumnDefinition Width="3"/>
+                                <ColumnDefinition Width="185"/>
+                                <ColumnDefinition Width="2"/>
                                 <ColumnDefinition Width="60*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Margin="0,0,3,0">
+                            <Grid Grid.Column="0" Margin="0,0,2,0">
                                 <ListBox ItemsSource="{Binding SerialsList.SerialItems, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedItem="{Binding SerialsList.SelectedItem, UpdateSourceTrigger=PropertyChanged}"
                                          SelectedIndex="{Binding SerialsList.SelectedIndex, UpdateSourceTrigger=PropertyChanged}" 
@@ -185,8 +188,8 @@
                                     </Button>
                                 </Grid>
                             </Grid>
-                            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"/>
-                            <Grid Grid.Column="2" Margin="3,0,0,0">
+                            <GridSplitter HorizontalAlignment="Stretch" Grid.Column="1"/>
+                            <Grid Grid.Column="2" Margin="2,0,0,0">
                                 <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
                                     <Grid Margin="0,0,0,37">
                                         <Grid.ColumnDefinitions>
@@ -248,7 +251,7 @@
                         </Grid>
                     </DockPanel>
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    <Grid Grid.Row="2" Margin="0,3,0,0">
+                    <Grid Grid.Row="2" Margin="0,2,0,0">
                         <Border Background="{DynamicResource ContainerBackground}" BorderThickness="1" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
                         <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="175">
                             <Grid DataContext="{Binding SerialsList.SelectedItem.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,7,54">
@@ -260,7 +263,7 @@
                                 <Label Content="{Binding ActiveCOMName, UpdateSourceTrigger=PropertyChanged}" Margin="28,26,0,0" VerticalAlignment="Top"/>
                                 <Button Command="{Binding ConnectDisconnedCommand}" Margin="0,52,0,0">
                                     <Grid Width="120" Height="24">
-                                        <Image Width="20" Source="Resources/AppIcons/connectIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                        <Image Width="24" Source="Resources/AppIcons/connectIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 0"/>
                                         <TextBlock Text="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}"
                                                    Margin="8 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Grid>

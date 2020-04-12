@@ -27,7 +27,7 @@ namespace SerialCommunicator.Controls
         public SerialItem(string name)
         {
             InitializeComponent();
-            SerialView = new SerialViewModel();
+            SerialView = new SerialViewModel(name);
             DataContext = SerialView;
             SerialView.SerialItemName = name;
         }

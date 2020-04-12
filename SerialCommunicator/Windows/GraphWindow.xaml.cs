@@ -49,5 +49,15 @@ namespace SerialCommunicator.Windows
             Show();
             GraphView.StartPlotting();
         }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            GraphView.Controller.RequestVirtualRangeChange();
+        }
+
+        private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            GraphView.Controller.RequestVirtualRangeChange();
+        }
     }
 }

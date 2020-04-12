@@ -2,11 +2,11 @@
 using SerialCommunicator.Controls;
 using SerialCommunicator.SerialFileLogger;
 using SerialCommunicator.Utilities;
+using SerialCommunicator.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -55,10 +55,16 @@ namespace SerialCommunicator.ViewModels
         #endregion
 
         #region Public Fields
+
         public string SerialItemName
         {
             get => _serialItemName;
-            set => RaisePropertyChanged(ref _serialItemName, value);
+            set
+            {
+                RaisePropertyChanged(ref _serialItemName, value);
+                if (GraphWindow != null)
+                    GraphWindow.Title = value;
+            }
         }
         public bool IsConnected
         {
@@ -150,18 +156,16 @@ namespace SerialCommunicator.ViewModels
             get => _waitingStatus;
             set => RaisePropertyChanged(ref _waitingStatus, value);
         }
+
         #endregion
 
-        public Action<string> MessageReceivedCallback { get; set; }
         public string ReceivedDataBuffer { get; set; }
 
-        private TransceiveSettingsViewModel _settings = new TransceiveSettingsViewModel();
-        public TransceiveSettingsViewModel Settings
-        {
-            get => _settings;
-            set => RaisePropertyChanged(ref _settings, value);
-        }
+        public TransceiveSettingsViewModel Settings { get; set; }
+
         public SerialPort SerialPort { get; set; }
+
+        public GraphWindow GraphWindow { get; set; }
 
         #region Constructor
 
@@ -194,6 +198,51 @@ namespace SerialCommunicator.ViewModels
             ConnectDisconnectButtonContent = "Connect";
 
             UpdateSerialValues();
+        }
+
+        public SerialViewModel(string name) : this()
+        {
+            SerialItemName = name;
+
+            GraphWindow = new GraphWindow();
+            GraphWindow.Title = SerialItemName;
+        }
+
+        ~SerialViewModel()
+        {
+            ShutdownEverything();
+        }
+
+        #endregion
+
+        #region Graphs
+
+        public void SerialMessageReceived(string message)
+        {
+            int sizeCounter = 0;
+            if (IsDigitsOnly(message) && int.TryParse(message, out sizeCounter))
+            {
+                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+            }
+            else
+            {
+                foreach (char letter in message)
+                {
+                    sizeCounter += CharAlphabeticalPositions.CharToAlphabeticalPosition(letter);
+                }
+                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+            }
+        }
+
+        bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
+            }
+
+            return true;
         }
 
         #endregion
@@ -328,7 +377,7 @@ namespace SerialCommunicator.ViewModels
                             if (!string.IsNullOrEmpty(dataReceived))
                             {
                                 MessageReceived(dataReceived);
-                                MessageReceivedCallback?.Invoke(dataReceived);
+                                SerialMessageReceived(dataReceived);
                             }
                             //MessageReceived(SerialPort.ReadLine());
                         }
@@ -336,13 +385,13 @@ namespace SerialCommunicator.ViewModels
                         {
                             string dataReceived = SerialPort.ReadTo(Settings.CustomTag);
                             MessageReceived(dataReceived);
-                            MessageReceivedCallback?.Invoke(dataReceived);
+                            SerialMessageReceived(dataReceived);
                         }
                         else if (Settings.ReceiveWithNothingElse)
                         {
                             string dataReceived = ReadRawText();
                             MessageReceived(dataReceived);
-                            MessageReceivedCallback?.Invoke(dataReceived);
+                            SerialMessageReceived(dataReceived);
                         }
                     }
                     catch (TimeoutException t)
@@ -422,44 +471,48 @@ namespace SerialCommunicator.ViewModels
         //thread safe
         public void AddReceivedMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                ReceivedMessages.Insert(0, new SerialMessage(message));
-            });
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message));
+                });
         }
         //thread safe
         public void AddSentMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (ReceivedMessages.Count >= MaxReceivableMessages) SentMessages.Clear();
-                SentMessages.Insert(0, new SerialMessage(message));
-            });
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (ReceivedMessages.Count >= MaxReceivableMessages) SentMessages.Clear();
+                    SentMessages.Insert(0, new SerialMessage(message));
+                });
         }
         //thread safe
         public void AddErrorMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                ReceivedMessages.Insert(0, new SerialMessage(message)
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
+                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message)
+                    {
+                        Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
+                    });
                 });
-            });
         }
         //thread safe
         public void AddAlertMessage(SerialMessageModel message)
         {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                ReceivedMessages.Insert(0, new SerialMessage(message)
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
+                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message)
+                    {
+                        Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
+                    });
                 });
-            });
         }
 
         #endregion

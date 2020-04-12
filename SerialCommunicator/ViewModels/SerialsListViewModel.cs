@@ -58,7 +58,6 @@ namespace SerialCommunicator.ViewModels
         {
             SerialItem item = new SerialItem($"Serial {SerialItems.Count}");
             item.Close = this.RemoveSerialItem;
-            item.SerialView.MessageReceivedCallback = this.MessageReceivedCallback;
             AddSerialItem(item);
         }
 
