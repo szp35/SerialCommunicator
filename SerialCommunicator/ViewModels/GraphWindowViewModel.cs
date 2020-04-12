@@ -42,7 +42,7 @@ namespace SerialCommunicator.ViewModels
 
             GraphTimer = new DispatcherTimer()
             {
-                Interval = TimeSpan.FromMilliseconds(50)
+                Interval = TimeSpan.FromMilliseconds(40)
             };
 
             GraphTimer.Tick += GraphTimer_Tick;
@@ -73,14 +73,7 @@ namespace SerialCommunicator.ViewModels
         /// <param name="yValue">The height of the plot. Min = 0, Max = 1024</param>
         public void PlotGraph(double yValue)
         {
-            if (yValue >= 0 && yValue <= 1023)
-            {
-                ActivePlotValue = yValue;
-            }
-            else
-            {
-                ActivePlotValue = 1024 / yValue * (yValue / 10);
-            }
+            ActivePlotValue = yValue;
         }
     }
 }

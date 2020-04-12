@@ -79,12 +79,29 @@ namespace SerialCommunicator.ViewModels
         public void SerialMessageReceived(string message)
         {
             int sizeCounter = 0;
-            foreach(char letter in message)
+            if (IsDigitsOnly(message) && int.TryParse(message, out sizeCounter))
             {
-                sizeCounter += CharAlphabeticalPositions.CharToAlphabeticalPosition(letter);
+                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+            }
+            else
+            {
+                foreach (char letter in message)
+                {
+                    sizeCounter += CharAlphabeticalPositions.CharToAlphabeticalPosition(letter);
+                }
+                Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+            }
+        }
+
+        bool IsDigitsOnly(string str)
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return false;
             }
 
-            Application.Current.Dispatcher.Invoke(() => { GraphWindow.GraphView.PlotGraph(Convert.ToDouble(sizeCounter)); });
+            return true;
         }
 
         public void ResetSerialView()
