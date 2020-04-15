@@ -25,11 +25,11 @@ namespace SerialCommunicator.Windows
     {
         public ICommand ShowWindowCommand { get; set; }
 
-        public GraphWindowViewModel GraphView { get; set; }
+        public GraphViewModel GraphView { get; set; }
         public GraphWindow()
         {
             InitializeComponent();
-            GraphView = new GraphWindowViewModel();
+            GraphView = new GraphViewModel();
             DataContext = GraphView;
 
             ShowWindowCommand = new Command(ShowWindow);

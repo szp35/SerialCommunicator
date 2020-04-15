@@ -46,9 +46,6 @@ namespace SerialCommunicator.ViewModels
         private bool _dataTerminalReady;
         private string _cnctDcnctBtnContent;
 
-        private ObservableCollection<SerialMessage> _receivedMessages = new ObservableCollection<SerialMessage>();
-        private ObservableCollection<SerialMessage> _sentMessages = new ObservableCollection<SerialMessage>();
-
         private string _toBeSentText;
         private bool _waitingStatus;
 
@@ -136,16 +133,8 @@ namespace SerialCommunicator.ViewModels
             get => _cnctDcnctBtnContent;
             set => RaisePropertyChanged(ref _cnctDcnctBtnContent, value);
         }
-        public ObservableCollection<SerialMessage> ReceivedMessages
-        {
-            get => _receivedMessages;
-            set => RaisePropertyChanged(ref _receivedMessages, value);
-        }
-        public ObservableCollection<SerialMessage> SentMessages
-        {
-            get => _sentMessages;
-            set => RaisePropertyChanged(ref _sentMessages, value);
-        }
+        public ObservableCollection<SerialMessage> ReceivedMessages { get; set; }
+        public ObservableCollection<SerialMessage> SentMessages { get; set; }
         public string ToBeSentText
         {
             get => _toBeSentText;
@@ -157,20 +146,20 @@ namespace SerialCommunicator.ViewModels
             set => RaisePropertyChanged(ref _waitingStatus, value);
         }
 
-        #endregion
-
         public string ReceivedDataBuffer { get; set; }
 
+        #endregion
+
         public TransceiveSettingsViewModel Settings { get; set; }
-
         public SerialPort SerialPort { get; set; }
-
         public GraphWindow GraphWindow { get; set; }
 
         #region Constructor
 
         public SerialViewModel()
         {
+            ReceivedMessages = new ObservableCollection<SerialMessage>();
+            SentMessages = new ObservableCollection<SerialMessage>();
             ConnectDisconnedCommand = new Command(AutoConnectDisconnect);
             SendMessageCommand = new Command(SendMessage);
             ClearReceivedMessagesCommand = new Command(ClearReceivedMessages);
@@ -200,6 +189,7 @@ namespace SerialCommunicator.ViewModels
             UpdateSerialValues();
         }
 
+        //executes the constructor above first, then this one.
         public SerialViewModel(string name) : this()
         {
             SerialItemName = name;
@@ -778,7 +768,7 @@ namespace SerialCommunicator.ViewModels
         #endregion
 
         /// <summary>
-        /// Use when removing SerialItems. if you dont use this, an open SerialPort would still remain open.
+        /// Use when deleting SerialItems. if you dont use this, an open SerialPort would still remain open.
         /// </summary>
         public void ShutdownEverything()
         {

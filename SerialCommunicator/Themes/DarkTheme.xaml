@@ -1830,7 +1830,7 @@
                                            PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" 
                                            Placement="Bottom">
                                 <Border x:Name="SubMenuBorder" BorderBrush="{StaticResource ControlDefaultBorderBrush}" 
-                                                BorderThickness="2" Background="{StaticResource ControlDefaultBorderBrush}" Padding="2">
+                                                BorderThickness="1" Background="{StaticResource ControlDefaultBorderBrush}" Padding="1">
                                     <ScrollViewer x:Name="SubMenuScrollViewer" 
                                                           Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, 
                                                                   TypeInTargetAssembly={x:Type FrameworkElement}}}">

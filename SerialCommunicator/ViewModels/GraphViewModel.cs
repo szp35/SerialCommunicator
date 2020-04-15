@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace SerialCommunicator.ViewModels
 {
-    public class GraphWindowViewModel : BaseViewModel
+    public class GraphViewModel : BaseViewModel
     {
         public WpfGraphController<TimeSpanDataPoint, DoubleDataPoint> Controller { get; set; }
 
@@ -26,7 +26,7 @@ namespace SerialCommunicator.ViewModels
 
         public DispatcherTimer GraphTimer { get; set; }
 
-        public GraphWindowViewModel()
+        public GraphViewModel()
         {
             Controller = new WpfGraphController<TimeSpanDataPoint, DoubleDataPoint>();
             Controller.Range.MinimumY = 0;

@@ -12,12 +12,7 @@ namespace SerialCommunicator.ViewModels
 {
     public class SerialsListViewModel : BaseViewModel
     {
-        private ObservableCollection<SerialItem> _serialItems = new ObservableCollection<SerialItem>();
-        public ObservableCollection<SerialItem> SerialItems
-        {
-            get => _serialItems;
-            set => RaisePropertyChanged(ref _serialItems, value);
-        }
+        public ObservableCollection<SerialItem> SerialItems { get; set; }
 
         private SerialItem _selectedItem;
         public SerialItem SelectedItem
@@ -25,7 +20,7 @@ namespace SerialCommunicator.ViewModels
             get => _selectedItem;
             set
             {
-                RaisePropertyChanged(ref _selectedItem, value);
+                RaisePropertyChanged(ref _selectedItem, value); 
                 //ItemChanged?.Invoke(value);
             }
         }
@@ -45,12 +40,13 @@ namespace SerialCommunicator.ViewModels
         public Action ScrollSentIntoViewCallback { get; set; }
         public Action<string> MessageReceivedCallback { get; set; }
 
-        public ICommand NewSerialItem { get; set; }
+        public ICommand NewSerialItemCommand { get; set; }
         public ICommand RemoveSerialItemCommand { get; set; }
 
         public SerialsListViewModel()
         {
-            NewSerialItem = new Command(CreateSerialItem);
+            SerialItems = new ObservableCollection<SerialItem>();
+            NewSerialItemCommand = new Command(CreateSerialItem);
             RemoveSerialItemCommand = new Command(RemoveSerialItem);
         }
 

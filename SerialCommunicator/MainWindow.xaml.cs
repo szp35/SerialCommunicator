@@ -1,4 +1,5 @@
-﻿using SerialCommunicator.ViewModels;
+﻿using SerialCommunicator.Utilities;
+using SerialCommunicator.ViewModels;
 using SerialCommunicator.Windows;
 using System;
 using System.Collections.Generic;

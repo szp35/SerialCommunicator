@@ -21,13 +21,7 @@ namespace SerialCommunicator.ViewModels
         public ICommand CloseWindowCommand { get; set; }
         public ICommand RefreshCOMPortsCommand { get; set; }
         public ICommand ResetSerialViewCommand { get; set; }
-
-        private ObservableCollection<string> _avaliableComPorts = new ObservableCollection<string>();
-        public ObservableCollection<string> AvaliableCOMPorts
-        {
-            get => _avaliableComPorts;
-            set => RaisePropertyChanged(ref _avaliableComPorts, value);
-        }
+        public ObservableCollection<string> AvaliableCOMPorts { get; set; }
 
 
         //private SerialViewModel _serialView;
@@ -42,6 +36,7 @@ namespace SerialCommunicator.ViewModels
 
         public MainViewModel()
         {
+            AvaliableCOMPorts = new ObservableCollection<string>();
             MinimizeWindowCommand = new Command(Minimize);
             MaximizeRestoreCommand = new Command(MaximizeRestore);
             CloseWindowCommand = new Command(CloseWindow);

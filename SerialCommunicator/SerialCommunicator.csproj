@@ -67,6 +67,7 @@
     <Compile Include="Controls\SerialMessage.xaml.cs">
       <DependentUpon>SerialMessage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FormattedDataTransceiver\FormattedDataViewModel.cs" />
     <Compile Include="Graph\DataPoints\DoubleDataPoint.cs" />
     <Compile Include="Graph\DataPoints\FloatDataPoint.cs" />
     <Compile Include="Graph\DataPoints\Int32DataPoint.cs" />
@@ -104,15 +105,22 @@
     <Compile Include="Utilities\CharAlphabeticalPositions.cs" />
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandParam.cs" />
+    <Compile Include="Utilities\Debugger.cs" />
     <Compile Include="Utilities\InverseBooleanConverter.cs" />
     <Compile Include="Utilities\ObjectNullToControlEnabledConverter.cs" />
-    <Compile Include="ViewModels\GraphWindowViewModel.cs" />
+    <Compile Include="ViewModels\GraphViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SerialMessageModel.cs" />
     <Compile Include="ViewModels\SerialsListViewModel.cs" />
     <Compile Include="ViewModels\SerialViewModel.cs" />
     <Compile Include="ViewModels\TransceiveSettingsViewModel.cs" />
+    <Compile Include="Windows\DataFormatTransceiverWindow.xaml.cs">
+      <DependentUpon>DataFormatTransceiverWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DebugWindow.xaml.cs">
+      <DependentUpon>DebugWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\GraphWindow.xaml.cs">
       <DependentUpon>GraphWindow.xaml</DependentUpon>
     </Compile>
@@ -150,6 +158,14 @@
     <Page Include="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DataFormatTransceiverWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\DebugWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\GraphWindow.xaml">
       <SubType>Designer</SubType>

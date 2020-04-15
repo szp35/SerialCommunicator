@@ -29,5 +29,10 @@ namespace SerialCommunicator.Utilities
 #pragma warning disable 67
         public event EventHandler CanExecuteChanged { add { } remove { } }
 #pragma warning restore 67
+
+        public static void ExecuteCommand(ICommand command)
+        {
+            command.Execute(null);
+        }
     }
 }
