@@ -59,7 +59,7 @@ namespace SerialCommunicator.ViewModels
             set
             {
                 RaisePropertyChanged(ref _serialItemName, value);
-                if (GraphWindow != null)
+                if (GraphWindow != null && !string.IsNullOrEmpty(value))
                     GraphWindow.Title = value;
             }
         }
@@ -154,7 +154,7 @@ namespace SerialCommunicator.ViewModels
         public SerialPort SerialPort { get; set; }
         public GraphWindow GraphWindow { get; set; }
 
-        #region Constructor
+        #region Constructor and Destructor
 
         public SerialViewModel()
         {
@@ -170,22 +170,7 @@ namespace SerialCommunicator.ViewModels
 
             RestartSerialPort();
             Settings = new TransceiveSettingsViewModel();
-
-            // 0.5 seconds, is relatively reasonable.
-            SendTimeout = 500;
-            ReceiveTimeout = 500;
-            BufferSize = 4096;
-            // too many could slow down the program
-            MaxReceivableMessages = 150;
-            COMName = "COM1";
-            ActiveCOMName = COMName;
-            BaudRate = "9600";
-            DataBits = "8";
-            StopBits = "One";
-            Parity = "None";
-            HandShake = "None";
-            ConnectDisconnectButtonContent = "Connect";
-
+            SetDefaultValues();
             UpdateSerialValues();
         }
 
@@ -193,7 +178,6 @@ namespace SerialCommunicator.ViewModels
         public SerialViewModel(string name) : this()
         {
             SerialItemName = name;
-
             GraphWindow = new GraphWindow();
             GraphWindow.Title = SerialItemName;
         }
@@ -207,7 +191,7 @@ namespace SerialCommunicator.ViewModels
 
         #region Graphs
 
-        public void SerialMessageReceived(string message)
+        public void PlotMessageToGraph(string message)
         {
             int sizeCounter = 0;
             if (IsDigitsOnly(message) && int.TryParse(message, out sizeCounter))
@@ -367,7 +351,7 @@ namespace SerialCommunicator.ViewModels
                             if (!string.IsNullOrEmpty(dataReceived))
                             {
                                 MessageReceived(dataReceived);
-                                SerialMessageReceived(dataReceived);
+                                PlotMessageToGraph(dataReceived);
                             }
                             //MessageReceived(SerialPort.ReadLine());
                         }
@@ -375,13 +359,13 @@ namespace SerialCommunicator.ViewModels
                         {
                             string dataReceived = SerialPort.ReadTo(Settings.CustomTag);
                             MessageReceived(dataReceived);
-                            SerialMessageReceived(dataReceived);
+                            PlotMessageToGraph(dataReceived);
                         }
                         else if (Settings.ReceiveWithNothingElse)
                         {
                             string dataReceived = ReadRawText();
                             MessageReceived(dataReceived);
-                            SerialMessageReceived(dataReceived);
+                            PlotMessageToGraph(dataReceived);
                         }
                     }
                     catch (TimeoutException t)
@@ -691,6 +675,25 @@ namespace SerialCommunicator.ViewModels
         {
             Application.Current.Dispatcher.Invoke(() => WaitingStatus = waiting);
         }
+
+        public void SetDefaultValues()
+        {
+            // 0.5 seconds, is relatively reasonable.
+            SendTimeout = 500;
+            ReceiveTimeout = 500;
+            BufferSize = 4096;
+            // too many could slow down the program
+            MaxReceivableMessages = 150;
+            COMName = "COM1";
+            ActiveCOMName = COMName;
+            BaudRate = "9600";
+            DataBits = "8";
+            StopBits = "One";
+            Parity = "None";
+            HandShake = "None";
+            ConnectDisconnectButtonContent = "Connect";
+        }
+
         public void UpdateSerialValues()
         {
             UpdateSendTimeout(int.Parse(Math.Round(SendTimeout, 0).ToString()));
@@ -719,15 +722,19 @@ namespace SerialCommunicator.ViewModels
         }
         private void UpdateSendTimeout(int newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.WriteTimeout = newVal;
+            if (!SerialPort.IsOpen && newVal > 0) SerialPort.WriteTimeout = newVal;
         }
         private void UpdateReceiveTimeout(int newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.ReadTimeout = newVal;
+            if (!SerialPort.IsOpen && newVal > 0) SerialPort.ReadTimeout = newVal;
         }
         private void UpdateBufferSize(int newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.ReadBufferSize = newVal; SerialPort.WriteBufferSize = newVal;
+            if (!SerialPort.IsOpen && newVal > 0)
+            {
+                SerialPort.ReadBufferSize = newVal; 
+                SerialPort.WriteBufferSize = newVal;
+            }
         }
         private void UpdateCOMName(string newVal)
         {
@@ -742,11 +749,11 @@ namespace SerialCommunicator.ViewModels
         }
         private void UpdateBaudRate(int newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.BaudRate = newVal;
+            if (!SerialPort.IsOpen && newVal > 0) SerialPort.BaudRate = newVal;
         }
         private void UpdateDataBits(int newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.DataBits = newVal;
+            if (!SerialPort.IsOpen && newVal > 0) SerialPort.DataBits = newVal;
         }
         private void UpdateStopBits(string newVal)
         {
@@ -773,7 +780,9 @@ namespace SerialCommunicator.ViewModels
         public void ShutdownEverything()
         {
             if (SerialPort != null)
+            {
                 SerialPort.Dispose();
+            }
         }
     }
 }

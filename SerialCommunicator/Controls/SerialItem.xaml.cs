@@ -1,7 +1,10 @@
-﻿using SerialCommunicator.ViewModels;
+﻿using SerialCommunicator.Utilities;
+using SerialCommunicator.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,14 +25,12 @@ namespace SerialCommunicator.Controls
     public partial class SerialItem : UserControl
     {
         public Action<SerialItem> Close { get; set; }
-        public SerialViewModel SerialView { get; set; }
-
+        public SerialItemViewModel ItemView { get; set; }
         public SerialItem(string name)
         {
             InitializeComponent();
-            SerialView = new SerialViewModel(name);
-            DataContext = SerialView;
-            SerialView.SerialItemName = name;
+            ItemView = new SerialItemViewModel(new SerialViewModel(name));
+            DataContext = ItemView;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

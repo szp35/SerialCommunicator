@@ -10,7 +10,7 @@
              mc:Ignorable="d" Background="Transparent"
              d:DesignHeight="54" d:DesignWidth="150">
     <Grid>
-        <Label Content="{Binding SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
+        <Label Content="{Binding SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
                    Background="Transparent"
                    Margin="2 2 25 0" Padding="4" 
                    VerticalAlignment="Top"/>
@@ -27,7 +27,7 @@
             <Label Content="Connected:" 
                    HorizontalAlignment="Left" Margin="2 0 0 0"
                    VerticalAlignment="Center"/>
-            <Label Content="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" 
+            <Label Content="{Binding SerialView.IsConnected, UpdateSourceTrigger=PropertyChanged}" 
                    Margin="74 0 0 0" VerticalAlignment="Center"/>
         </Grid>
     </Grid>

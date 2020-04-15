@@ -111,6 +111,7 @@
     <Compile Include="ViewModels\GraphViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SerialItemViewModel.cs" />
     <Compile Include="ViewModels\SerialMessageModel.cs" />
     <Compile Include="ViewModels\SerialsListViewModel.cs" />
     <Compile Include="ViewModels\SerialViewModel.cs" />

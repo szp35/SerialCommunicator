@@ -25,7 +25,7 @@ namespace SerialCommunicator.ViewModels
 
 
         //private SerialViewModel _serialView;
-        //public SerialViewModel SerialView
+        //public SerialViewModel ItemView.SerialView
         //{
         //    get => _serialView;
         //    set => RaisePropertyChanged(ref _serialView, value);
@@ -62,18 +62,19 @@ namespace SerialCommunicator.ViewModels
         //{
         //    if (item != null)
         //    {
-        //        SerialView = item.SerialView;
+        //        ItemView.SerialView = item.ItemView.SerialView;
         //    }
         //    else
-        //        SerialView = null;
+        //        ItemView.SerialView = null;
         //}
 
         public void ResetSerialView()
         {
             if (SerialsList.SelectedItem != null)
             {
-                SerialsList.SelectedItem.SerialView.RestartSerialPort();
-                SerialsList.SelectedItem.SerialView = new SerialViewModel();
+                SerialsList.SelectedItem.ItemView.SerialView.ShutdownEverything();
+                string oldName = SerialsList.SelectedItem.ItemView.SerialView.SerialItemName;
+                SerialsList.SelectedItem.ItemView.SerialView = new SerialViewModel(oldName);
             }
         }
 
