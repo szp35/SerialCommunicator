@@ -21,6 +21,10 @@ namespace SerialCommunicator.Controls
     /// </summary>
     public partial class SerialMessage : UserControl
     {
+        public SerialMessage()
+        {
+            InitializeComponent();
+        }
         public SerialMessage(string rxORtx, string message, DateTime time)
         {
             InitializeComponent();
@@ -31,6 +35,12 @@ namespace SerialCommunicator.Controls
             DataContext = model;
         }
 
+        public SerialMessage(SerialMessageModel messageVM, int index)
+        {
+            InitializeComponent();
+            messageVM.CountIndex = index.ToString();
+            DataContext = messageVM;
+        }
         public SerialMessage(SerialMessageModel messageVM)
         {
             InitializeComponent();

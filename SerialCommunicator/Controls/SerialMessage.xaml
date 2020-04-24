@@ -5,17 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              HorizontalAlignment="Stretch"
              HorizontalContentAlignment="Stretch"
+             Margin="0" Padding="0"
              xmlns:local="clr-namespace:SerialCommunicator.Controls" 
              xmlns:viewmodels="clr-namespace:SerialCommunicator.ViewModels"
              mc:Ignorable="d" ToolTip="{Binding Time, StringFormat='hh:mm:ss tt'}">
     <Grid>
-        <TextBlock Text="{Binding RXorTX, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0"/>
-        <TextBlock Text=">" VerticalAlignment="Center" Margin="36,4,0,4" HorizontalAlignment="Left" Width="8"/>
-        <TextBox Text="{Binding Message, UpdateSourceTrigger=PropertyChanged}"
+        <TextBlock Text="{Binding CountIndex}" Margin="2,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="20"/>
+        <Separator Style="{DynamicResource VerticalSeparator}" Margin="24,2,0,2" Width="1" HorizontalAlignment="Left"/>
+        <Grid Margin="27,0,0,0">
+            <TextBlock Text="{Binding RXorTX}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0"/>
+            <TextBlock Text=">" VerticalAlignment="Center" Margin="36,3,0,5" HorizontalAlignment="Left" Width="8" TextAlignment="Center"/>
+            <TextBox Text="{Binding Message}"
                  TextWrapping="Wrap"
                  Background="Transparent"
                  BorderThickness="0 0 0 1"
                  IsReadOnly="True"
                  Padding="1" Margin="46,2,2,2"/>
+        </Grid>
     </Grid>
 </UserControl>

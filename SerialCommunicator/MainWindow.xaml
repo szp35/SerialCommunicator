@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:SerialCommunicator.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:utilities="clr-namespace:SerialCommunicator.Utilities"
+        xmlns:utilities="clr-namespace:SerialCommunicator.Utilities" xmlns:controls="clr-namespace:SerialCommunicator.Controls"
         mc:Ignorable="d" 
         WindowStyle="SingleBorderWindow" 
         Style="{DynamicResource CustomWindowStyle}"
@@ -204,7 +204,7 @@
                                                      HorizontalContentAlignment="Stretch"
                                                      ItemsSource="{Binding ReceivedMessages, UpdateSourceTrigger=PropertyChanged}" 
                                                      BorderBrush="{DynamicResource ControlDefaultBorderBrush}"
-                                                     Margin="0,26,0,0"/>
+                                                     Margin="0,26,0,0" Style="{DynamicResource ItemIndexPresentedListBox}"/>
                                             <Button Command="{Binding ClearReceivedMessagesCommand}" BorderThickness="1 1 1 0" Height="26" VerticalAlignment="Top" Background="{DynamicResource BackgroundColour}" HorizontalAlignment="Left" Width="102">
                                                 <Grid Width="98" Height="23">
                                                     <Image Width="17" Source="Resources/AppIcons/removeIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0"/>
@@ -307,7 +307,7 @@
                                         <Button Command="{Binding ClearReceivedMessagesCommand}" Content="Clear Received" Margin="0 2 0 0" Grid.Row="1"/>
                                     </Grid>
                                     <Grid Height="40" VerticalAlignment="Bottom">
-                                        <Slider Value="{Binding MaxReceivableMessages, UpdateSourceTrigger=PropertyChanged}" Minimum="10" Maximum="1000" 
+                                        <Slider Value="{Binding MaximumAllowedMessages, UpdateSourceTrigger=PropertyChanged}" Minimum="10" Maximum="1000" 
                                                 Height="20" VerticalAlignment="Bottom" AutoToolTipPlacement="TopLeft" 
                                                 ToolTip="The maximum number of messages allowed in the Send and Received lists before they get cleared"/>
                                         <TextBlock Text="Message Limit" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="11"

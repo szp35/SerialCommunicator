@@ -34,7 +34,7 @@ namespace SerialCommunicator.ViewModels
         private double _sendTimeout;
         private double _receiveTimeout;
         private double _bufferSize;
-        private double _maxReceivableMessages;
+        private double _maximumAllowedMessages;
 
         private string _comName;
         private string _activeComName;
@@ -83,10 +83,10 @@ namespace SerialCommunicator.ViewModels
             get => _bufferSize;
             set { RaisePropertyChanged(ref _bufferSize, value); UpdateBufferSize(int.Parse(Math.Round(value, 0).ToString())); }
         }
-        public double MaxReceivableMessages
+        public double MaximumAllowedMessages
         {
-            get => _maxReceivableMessages;
-            set { RaisePropertyChanged(ref _maxReceivableMessages, value); }
+            get => _maximumAllowedMessages;
+            set { RaisePropertyChanged(ref _maximumAllowedMessages, value); }
         }
         public string COMName
         {
@@ -443,23 +443,23 @@ namespace SerialCommunicator.ViewModels
             }
         }
         //thread safe
-        public void AddReceivedMessage(SerialMessageModel message)
-        {
-            if (Application.Current != null)
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message));
-                });
-        }
-        //thread safe
         public void AddSentMessage(SerialMessageModel message)
         {
             if (Application.Current != null)
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaxReceivableMessages) SentMessages.Clear();
-                    SentMessages.Insert(0, new SerialMessage(message));
+                    if (SentMessages.Count >= MaximumAllowedMessages) SentMessages.Clear();
+                    SentMessages.Insert(0, new SerialMessage(message, SentMessages.Count));
+                });
+        }
+        //thread safe
+        public void AddReceivedMessage(SerialMessageModel message)
+        {
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count));
                 });
         }
         //thread safe
@@ -468,8 +468,8 @@ namespace SerialCommunicator.ViewModels
             if (Application.Current != null)
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message)
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
                     });
@@ -481,8 +481,8 @@ namespace SerialCommunicator.ViewModels
             if (Application.Current != null)
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaxReceivableMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message)
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
                     });
@@ -683,7 +683,7 @@ namespace SerialCommunicator.ViewModels
             ReceiveTimeout = 500;
             BufferSize = 4096;
             // too many could slow down the program
-            MaxReceivableMessages = 150;
+            MaximumAllowedMessages = 150;
             COMName = "COM1";
             ActiveCOMName = COMName;
             BaudRate = "9600";

@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SerialCommunicator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Serial Communicator")]
+[assembly: AssemblyDescription("A compact and feature-rich program for communicating through serial/COM ports, for arduinos for example")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SerialCommunicator")]
+[assembly: AssemblyCompany("TheR")]
+[assembly: AssemblyProduct("Serial Communicator")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -51,5 +51,6 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.4.5.2")]
+[assembly: AssemblyFileVersion("1.4.5.2")]
+[assembly: NeutralResourcesLanguage("en-GB")]
