@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SerialCommunicator.Windows" 
         xmlns:graphs="clr-namespace:SerialCommunicator.Graph" xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
-        mc:Ignorable="d" Style="{DynamicResource MainWindowStyle}"
+        mc:Ignorable="d" Style="{DynamicResource CustomWindowStyle}"
         Title="GraphWindow" Height="480" Width="850">
     <Window.Resources>
         <collections:ArrayList x:Key="colors">

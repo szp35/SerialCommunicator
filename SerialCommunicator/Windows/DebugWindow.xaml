@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SerialCommunicator.Windows"
-        mc:Ignorable="d" Style="{DynamicResource MainWindowStyle}"
-        Title="Debug" Height="532" Width="800">
+        mc:Ignorable="d" Style="{DynamicResource CustomWindowStyle}"
+        Title="Debug" Height="574" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

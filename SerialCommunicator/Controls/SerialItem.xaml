@@ -19,9 +19,10 @@
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="23" Height="23" 
                 Click="Button_Click">
-            <Image Source="/SerialCommunicator;component/Resources/AppIcons/deleteIcon.png" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"/>
+            <Grid Margin="1 1 0 0">
+                <Line X1="0" Y1="0" X2="11" Y2="11" Stroke="#FFE81414" StrokeThickness="3" />
+                <Line X1="0" Y2="0" Y1="11" X2="11" Stroke="#FFE81414" StrokeThickness="3" />
+            </Grid>
         </Button>
         <Grid Margin="0,26,0,0">
             <Label Content="Connected:" 

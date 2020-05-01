@@ -16,9 +16,6 @@ namespace SerialCommunicator.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public ICommand MinimizeWindowCommand { get; set; }
-        public ICommand MaximizeRestoreCommand { get; set; }
-        public ICommand CloseWindowCommand { get; set; }
         public ICommand RefreshCOMPortsCommand { get; set; }
         public ICommand ResetSerialViewCommand { get; set; }
         public ObservableCollection<string> AvaliableCOMPorts { get; set; }
@@ -37,9 +34,6 @@ namespace SerialCommunicator.ViewModels
         public MainViewModel()
         {
             AvaliableCOMPorts = new ObservableCollection<string>();
-            MinimizeWindowCommand = new Command(Minimize);
-            MaximizeRestoreCommand = new Command(MaximizeRestore);
-            CloseWindowCommand = new Command(CloseWindow);
             RefreshCOMPortsCommand = new Command(RefreshCOMPorts);
             ResetSerialViewCommand = new Command(ResetSerialView);
 
@@ -77,20 +71,5 @@ namespace SerialCommunicator.ViewModels
                 SerialsList.SelectedItem.ItemView.SerialView = new SerialViewModel(oldName);
             }
         }
-
-        #region Window Methods
-
-        public void CloseWindow() => Application.Current.MainWindow.Close();
-        public void MaximizeRestore()
-        {
-            Window mainWindow = Application.Current.MainWindow;
-            if (mainWindow.WindowState == WindowState.Maximized)
-                mainWindow.WindowState = WindowState.Normal;
-            else if (mainWindow.WindowState == WindowState.Normal)
-                mainWindow.WindowState = WindowState.Maximized;
-        }
-        public void Minimize() => Application.Current.MainWindow.WindowState = WindowState.Minimized;
-
-        #endregion
     }
 }

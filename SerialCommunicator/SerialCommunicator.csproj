@@ -106,6 +106,9 @@
     <Compile Include="Graph\WpfGraphGridLines.cs" />
     <Compile Include="Graph\WpfGraphSurface.cs" />
     <Compile Include="SerialFileLogger\MessageWriter.cs" />
+    <Compile Include="Themes\DarkTheme.xaml.cs">
+      <DependentUpon>DarkTheme.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\BaseViewModel.cs" />
     <Compile Include="Utilities\CharAlphabeticalPositions.cs" />
     <Compile Include="Utilities\Command.cs" />
@@ -161,10 +164,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\LightTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\DataFormatTransceiverWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,42 +208,28 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\closeWindow.png" />
-    <Resource Include="Resources\closeWindowBlack.png" />
-    <Resource Include="Resources\maximizeRestoreWindow.png" />
-    <Resource Include="Resources\maximizeRestoreWindowBlack.png" />
-    <Resource Include="Resources\minimizeWindow.png" />
-    <Resource Include="Resources\minimizeWindowBlack.png" />
+    <Resource Include="Resources\usbIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\usbIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\AppIcons\usbIconIco.ico" />
+    <Resource Include="Resources\usbIconIco.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="usbIconIco.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\removeIcon.png" />
+    <Resource Include="Resources\removeIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\addIcon.png" />
+    <Resource Include="Resources\menuIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\menuIcon.png" />
+    <Resource Include="Resources\writeFileIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\writeFileIcon.png" />
+    <Resource Include="Resources\refreshIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\AppIcons\deleteIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\AppIcons\refreshIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\AppIcons\connectIcon.png" />
+    <Resource Include="Resources\connectIcon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

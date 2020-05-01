@@ -28,10 +28,12 @@ namespace SerialCommunicator.Controls
         public SerialMessage(string rxORtx, string message, DateTime time)
         {
             InitializeComponent();
-            SerialMessageModel model = new SerialMessageModel();
-            model.RXorTX = rxORtx;
-            model.Message = message;
-            model.Time = time;
+            SerialMessageModel model = new SerialMessageModel()
+            {
+                RXorTX = rxORtx,
+                Message = message,
+                Time = time
+            };
             DataContext = model;
         }
 
