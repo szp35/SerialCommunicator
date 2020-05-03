@@ -449,7 +449,7 @@ namespace SerialCommunicator.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     if (SentMessages.Count >= MaximumAllowedMessages) SentMessages.Clear();
-                    SentMessages.Insert(0, new SerialMessage(message, SentMessages.Count));
+                    InsertSent(0, new SerialMessage(message, SentMessages.Count));
                 });
         }
         //thread safe
@@ -459,7 +459,7 @@ namespace SerialCommunicator.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count));
+                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count));
                 });
         }
         //thread safe
@@ -469,7 +469,7 @@ namespace SerialCommunicator.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count)
+                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
                     });
@@ -482,11 +482,20 @@ namespace SerialCommunicator.ViewModels
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
-                    ReceivedMessages.Insert(0, new SerialMessage(message, ReceivedMessages.Count)
+                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
                     });
                 });
+        }
+
+        public void InsertReceived(int index, SerialMessage msg)
+        {
+            ReceivedMessages.Insert(index, msg);
+        }
+        public void InsertSent(int index, SerialMessage msg)
+        {
+            SentMessages.Insert(index, msg);
         }
 
         #endregion

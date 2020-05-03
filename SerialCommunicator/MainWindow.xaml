@@ -22,6 +22,7 @@
         <viewmodels:MainViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <DropShadowBitmapEffect x:Key="NormalShadow" ShadowDepth="2" Softness="0.2" Opacity="0.64"/>
         <utilities:InverseBooleanConverter x:Key="InvertBoolean"/>
         <utilities:ObjectNullToControlEnabledConverter x:Key="ObjectNullConverter"/>
         <x:Array Type="sys:String" x:Key="StopBitsList">
@@ -69,11 +70,11 @@
         <Grid>
             <Grid>
                 <Menu VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <MenuItem Header="File" Template="{DynamicResource MenuItemStyle}">
+                    <MenuItem Header="File">
                         <MenuItem Header="Add New SerialPort" Command="{Binding SerialsList.NewSerialItemCommand}"
                                   InputGestureText="Ctrl + A" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
-                                <Image Source="Resources/addIcon.png"/>
+                                <Image Source="Resources/usbIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Remove SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}"
@@ -85,7 +86,7 @@
                         <Separator Style="{DynamicResource SeparatorStyle1}"/>
                         <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource SingleDropDownMenuItem}"/>
                     </MenuItem>
-                    <MenuItem Header="Connection" Template="{DynamicResource MenuItemStyle}" DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}">
+                    <MenuItem Header="Connection" DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}">
                         <MenuItem Header="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" 
                                   Command="{Binding ConnectDisconnedCommand}" InputGestureText="Ctrl + E" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
@@ -93,30 +94,72 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Graph" Template="{DynamicResource MenuItemStyle}">
+                    <MenuItem Header="Graph" >
                         <MenuItem Header="Show Graph Window" 
                                   Command="{Binding SerialsList.SelectedItem.ItemView.SerialView.GraphWindow.ShowWindowCommand}" 
                                   Template="{DynamicResource SingleDropDownMenuItem}"
                                   ToolTip="Open a graph that is linked to the received messages of a selected serial port."/>
                     </MenuItem>
-                    <MenuItem Header="Logs" Template="{DynamicResource MenuItemStyle}">
+                    <MenuItem Header="Logs" >
                         <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.SelectedItem.ItemView.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/writeFileIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="Help" Template="{DynamicResource MenuItemStyle}">
+                    <MenuItem Header="Help" >
                         <MenuItem Header="Show Help Window" Command="{Binding Help.ShowHelpWindowCommand}" Template="{DynamicResource SingleDropDownMenuItem}"/>
+                    </MenuItem>
+                    <MenuItem Header="Theme">
+                        <MenuItem Header="Light" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="0">
+                            <MenuItem.Icon>
+                                <Rectangle Stroke="#FF848484" Fill="#FFE8E8E8" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Colourful Light" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="1">
+                            <MenuItem.Icon>
+                                <Rectangle Stroke="#FF2C7FF5" Fill="#FFE8E8E8" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Dark" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="2">
+                            <MenuItem.Icon>
+                                <Rectangle Stroke="#FF404040" Fill="#FF1B1B1B" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Colourful Dark" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="3">
+                            <MenuItem.Icon>
+                                <Rectangle Stroke="#FF2C7FF5" Fill="#FF1B1B1B" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                 </Menu>
                 <Grid Height="25" VerticalAlignment="Top" Margin="300,0,0,0" DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}">
                     <TextBlock Text="{Binding SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center" FontSize="16"/>
-                    <Grid HorizontalAlignment="Right" Width="32" Margin="0,0,4,0">
-                        <Button Click="AutoShowMenu" Background="Transparent" BorderBrush="Transparent" Margin="7,0,0,0">
-                            <Image Source="Resources/menuIcon.png"/>
+                    <Grid HorizontalAlignment="Right" Width="23" Margin="0,2,2,0">
+                        <Button Click="AutoShowMenu" Background="Transparent" BorderBrush="Transparent">
+                            <Button.ContentTemplate>
+                                <DataTemplate>
+                                    <Grid Width="17" Height="21" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="2"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="2"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="2"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Rectangle Grid.Row="1" Fill="{DynamicResource ControlGlythColour}"/>
+                                        <Rectangle Grid.Row="3" Fill="{DynamicResource ControlGlythColour}"/>
+                                        <Rectangle Grid.Row="5" Fill="{DynamicResource ControlGlythColour}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </Button.ContentTemplate>
                         </Button>
                     </Grid>
                 </Grid>
@@ -158,7 +201,7 @@
                                 </TextBlock>
                             </CheckBox>
                         </StackPanel>
-                        <Grid Margin="3,0,0,0">
+                        <Grid Margin="2,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="185" MaxWidth="250"/>
                                 <ColumnDefinition Width="2"/>
@@ -170,7 +213,7 @@
                                          SelectedIndex="{Binding SerialsList.SelectedIndex, UpdateSourceTrigger=PropertyChanged}" 
                                          BorderBrush="{DynamicResource ControlDarkerBorderBrush}" BorderThickness="1 1 1 0"
                                          Focusable="False"
-                                         HorizontalContentAlignment="Stretch" Margin="0,0,0,36"/>
+                                         HorizontalContentAlignment="Stretch" Margin="0,0,0,36" />
                                 <Grid Height="36" VerticalAlignment="Bottom">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -198,7 +241,7 @@
                             </Grid>
                             <GridSplitter HorizontalAlignment="Stretch" Grid.Column="1"/>
                             <Grid Grid.Column="2" Margin="2,0,0,0">
-                                <Grid DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0">
+                                <Grid DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0">
                                     <Grid Margin="0,0,0,35">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="5*" MinWidth="332"/>
@@ -220,7 +263,7 @@
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="1,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
                                             <Label Content="Received Messages" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
-                                            <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
+                                            <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1 0" CornerRadius="3 3 0 0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                         </Grid>
                                         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,26,0,0"/>
                                         <Grid Grid.Column="2" Margin="2,0,0,0">
@@ -237,7 +280,7 @@
                                                 </Grid>
                                             </Button>
                                             <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
-                                            <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
+                                            <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" CornerRadius="3 3 0 0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                         </Grid>
                                     </Grid>
                                     <Grid IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" Height="33" VerticalAlignment="Bottom">

@@ -24,8 +24,10 @@ namespace SerialCommunicator
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public App CurrentApplication { get; set; }
+        public MainWindow(App app)
         {
+            CurrentApplication = app;
             InitializeComponent();
         }
 
@@ -51,6 +53,22 @@ namespace SerialCommunicator
             da.DecelerationRatio = 1;
 
             SettingsMenu.BeginAnimation(WidthProperty, da);
+        }
+
+        private void ChangeTheme(object sender, RoutedEventArgs e)
+        {
+            switch (int.Parse(((MenuItem)sender).Uid))
+            {
+                // light
+                case 0: CurrentApplication.SetTheme(App.Theme.Light); break;
+                // colourful light
+                case 1: CurrentApplication.SetTheme(App.Theme.ColourfulLight); break;
+                // dark
+                case 2: CurrentApplication.SetTheme(App.Theme.Dark); break;
+                // colourful dark
+                case 3: CurrentApplication.SetTheme(App.Theme.ColourfulDark); break;
+            }
+            e.Handled = true;
         }
     }
 }

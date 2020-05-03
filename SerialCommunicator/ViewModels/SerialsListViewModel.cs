@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SerialCommunicator.ViewModels
@@ -66,6 +67,7 @@ namespace SerialCommunicator.ViewModels
         public void AddSerialItem(SerialItem item)
         {
             SerialItems.Add(item);
+            AnimationLib.OpacityControl(item, 0, 1, 0.2);
         }
 
         public void RemoveSerialItem(SerialItem item)
