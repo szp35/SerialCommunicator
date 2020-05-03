@@ -8,12 +8,13 @@
              HorizontalAlignment="Stretch"
              HorizontalContentAlignment="Stretch"
              mc:Ignorable="d" Background="Transparent"
+             Foreground="{DynamicResource ControlDefaultForeground}"
              d:DesignHeight="54" d:DesignWidth="150">
     <Grid>
         <Label Content="{Binding SerialView.SerialItemName, UpdateSourceTrigger=PropertyChanged}" 
-                   Background="Transparent"
-                   Margin="2 2 25 0" Padding="4" 
-                   VerticalAlignment="Top"/>
+               Background="Transparent"
+               Margin="2 2 25 0" Padding="4" 
+               VerticalAlignment="Top"/>
         <Button Margin="0,2,2,0" 
                 Background="Transparent"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
