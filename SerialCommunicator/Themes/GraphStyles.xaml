@@ -3,19 +3,12 @@
                     xmlns:local="clr-namespace:SerialCommunicator"
                     xmlns:graphs="clr-namespace:SerialCommunicator.Graph">
     <Style TargetType="{x:Type graphs:GraphControl}">
-        <Setter Property="BorderThickness" Value="1"></Setter>
-        <Setter Property="BorderBrush" Value="#FF2E2E2E"></Setter>
-        <Setter Property="Padding" Value="20 20 30 20"></Setter>
-        <Setter Property="FontSize" Value="11"></Setter>
-        <Setter Property="Foreground" Value="DodgerBlue"></Setter>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" >
-                    <GradientStop Color="Black"/>
-                    <GradientStop Color="#FF333333" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ControlDefaultBorderBrush}"/>
+        <Setter Property="Padding" Value="20 20 30 20"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="Foreground" Value="{DynamicResource ControlDefaultForeground}"/>
+        <Setter Property="Background" Value="{DynamicResource ControlDefaultBackground}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type graphs:GraphControl}">

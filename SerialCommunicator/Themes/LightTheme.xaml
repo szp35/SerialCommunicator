@@ -2268,8 +2268,21 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="SeparatorStyle1" TargetType="{x:Type Separator}">
-        <Setter Property="Background" Value="{StaticResource ControlDefaultBorderBrush}"/>
+    <Style x:Key="VerticalSeparator" TargetType="{x:Type Separator}">
+        <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBackground}"/>
+        <Setter Property="Width" Value="2"/>
+        <Setter Property="Margin" Value="2,0,2,0"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Height="Auto" SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="MenuItemSeparator" TargetType="{x:Type Separator}">
+        <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBorderBrush}"/>
         <Setter Property="Margin" Value="0,2,0,2"/>
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="Template">
@@ -3715,19 +3728,4 @@
     </ControlTemplate>
 
     <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- -->
-
-    <!-- Separator -->
-    <Style x:Key="VerticalSeparator" TargetType="{x:Type Separator}">
-        <Setter Property="Background" Value="{StaticResource ControlBrightDefaultBackground}"/>
-        <Setter Property="Width" Value="2"/>
-        <Setter Property="Margin" Value="2,0,2,0"/>
-        <Setter Property="Focusable" Value="false"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Separator}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Height="Auto" SnapsToDevicePixels="true"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </ResourceDictionary>

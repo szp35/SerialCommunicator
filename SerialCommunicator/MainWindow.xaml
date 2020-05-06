@@ -77,20 +77,24 @@
                                 <Image Source="Resources/usbIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="Remove SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}"
+                        <MenuItem Header="Remove Selected SerialPort" Command="{Binding SerialsList.RemoveSerialItemCommand}"
                                   InputGestureText="Ctrl + X" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
                                 <Image Source="Resources/removeIcon.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <Separator Style="{DynamicResource SeparatorStyle1}"/>
-                        <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource SingleDropDownMenuItem}"/>
-                    </MenuItem>
-                    <MenuItem Header="Connection" DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}">
-                        <MenuItem Header="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}" 
-                                  Command="{Binding ConnectDisconnedCommand}" InputGestureText="Ctrl + E" Template="{DynamicResource SingleDropDownMenuItem}">
+                        <Separator/>
+                        <MenuItem Header="Save Messages to File" Command="{Binding SerialsList.SelectedItem.ItemView.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
-                                <Image Source="Resources/connectIcon.png"/>
+                                <Image Source="Resources/writeFileIcon.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator Style="{DynamicResource MenuItemSeparator}"/>
+                        <MenuItem Header="Reset SerialPort" Command="{Binding ResetSerialViewCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
+                            <MenuItem.Icon>
+                                <Grid>
+                                    <Line StrokeThickness="3" Stroke="{DynamicResource ControlGlythColour}" X1="0" Y1="16" X2="16" Y2="0"/>
+                                </Grid>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
@@ -98,17 +102,23 @@
                         <MenuItem Header="Show Graph Window" 
                                   Command="{Binding SerialsList.SelectedItem.ItemView.SerialView.GraphWindow.ShowWindowCommand}" 
                                   Template="{DynamicResource SingleDropDownMenuItem}"
-                                  ToolTip="Open a graph that is linked to the received messages of a selected serial port."/>
-                    </MenuItem>
-                    <MenuItem Header="Logs" >
-                        <MenuItem Header="Write Messages to File" Command="{Binding SerialsList.SelectedItem.ItemView.SerialView.WriteMessagesToFileCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
+                                  ToolTip="Open a graph that is linked to the received messages of a selected serial port.">
                             <MenuItem.Icon>
-                                <Image Source="Resources/writeFileIcon.png"/>
+                                <Grid Background="{DynamicResource ControlDisabledGlythColour}">
+                                    <Line X1="0" Y1="11" X2="5" Y2="6" Stroke="{DynamicResource ControlGlythColour}" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    <Line X1="5" Y1="6" X2="10" Y2="11" Stroke="{DynamicResource ControlGlythColour}" StrokeEndLineCap="Round"/>
+                                    <Line X1="10" Y1="11" X2="16" Y2="5" Stroke="{DynamicResource ControlGlythColour}" StrokeEndLineCap="Round"/>
+                                </Grid>
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
+                    
                     <MenuItem Header="Help" >
-                        <MenuItem Header="Show Help Window" Command="{Binding Help.ShowHelpWindowCommand}" Template="{DynamicResource SingleDropDownMenuItem}"/>
+                        <MenuItem Header="Show Help Window" Command="{Binding Help.ShowHelpWindowCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
+                            <MenuItem.Icon>
+                                <TextBlock Text="?" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ControlGlythColour}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
                     <MenuItem Header="Theme">
                         <MenuItem Header="Light" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="0">
@@ -118,7 +128,7 @@
                         </MenuItem>
                         <MenuItem Header="Colourful Light" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="1">
                             <MenuItem.Icon>
-                                <Rectangle Stroke="#FF2C7FF5" Fill="#FFE8E8E8" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
+                                <Rectangle Stroke="#FF6496FF" Fill="#FFE8E8E8" StrokeThickness="2" StrokeLineJoin="Round" BitmapEffect="{StaticResource NormalShadow}"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Dark" Template="{DynamicResource SingleDropDownMenuItem}" Click="ChangeTheme" Uid="2">
@@ -289,9 +299,9 @@
                                                 Background="{DynamicResource ControlDarkerBackground}" 
                                                 BorderBrush="{DynamicResource ControlDarkerBorderBrush}"/>
                                         <TextBox TextWrapping="Wrap" Padding="4"  VerticalContentAlignment="Center"
-                                             Text="{Binding ToBeSentText, UpdateSourceTrigger=PropertyChanged}"
-                                             FontSize="16" Margin="98,0,0,0" Background="Transparent" 
-                                             BorderBrush="{DynamicResource ControlDefaultBorderBrush}">
+                                                 Text="{Binding ToBeSentText, UpdateSourceTrigger=PropertyChanged}"
+                                                 FontSize="16" Margin="98,0,0,0" Background="Transparent" 
+                                                 BorderBrush="{DynamicResource ControlDefaultBorderBrush}">
                                             <TextBox.InputBindings>
                                                 <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}"/>
                                             </TextBox.InputBindings>
