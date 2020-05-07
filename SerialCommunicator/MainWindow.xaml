@@ -112,7 +112,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                    
+
                     <MenuItem Header="Help" >
                         <MenuItem Header="Show Help Window" Command="{Binding Help.ShowHelpWindowCommand}" Template="{DynamicResource SingleDropDownMenuItem}">
                             <MenuItem.Icon>
@@ -368,35 +368,39 @@
                                                 ToolTip="Clear all of the received messages in the list above"/>
                                     </Grid>
                                     <Grid Height="40" VerticalAlignment="Bottom">
-                                        <Slider Value="{Binding MaximumAllowedMessages, UpdateSourceTrigger=PropertyChanged}" Minimum="10" Maximum="1000" 
+                                        <Slider Value="{Binding MaximumAllowedMessages, UpdateSourceTrigger=PropertyChanged}" Minimum="10" Maximum="500" 
                                                 Height="20" VerticalAlignment="Bottom" AutoToolTipPlacement="TopLeft" 
-                                                ToolTip="The maximum number of messages allowed in the Send/Received lists above, before the list get cleared"/>
+                                                ToolTip="The maximum number of messages allowed in the Send/Received lists above, before the list get cleared" TickFrequency="10"
+                                                IsSnapToTickEnabled="False"/>
                                         <TextBlock Text="Message Limit" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="11"
                                                    Margin="16,2,16,0"/>
                                     </Grid>
                                 </Grid>
                                 <Grid Margin="109,0,0,0">
                                     <Label Content="Timeouts" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,26,0,0" VerticalAlignment="Top">
+                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="0,26,0,0" VerticalAlignment="Top">
                                         <Label Content="Read" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <Slider VerticalAlignment="Center" Margin="42,2,0,2" IsMoveToPointEnabled="True"
+                                        <Slider VerticalAlignment="Center" Margin="42,0,0,0" IsMoveToPointEnabled="True"
                                                 Minimum="100" Maximum="10000" Value="{Binding ReceiveTimeout, UpdateSourceTrigger=PropertyChanged}"
-                                                ToolTip="Time to wait for an incomming message to be read" AutoToolTipPlacement="TopLeft"/>
+                                                ToolTip="Time to wait for an incomming message to be read" AutoToolTipPlacement="TopLeft" 
+                                                LargeChange="500" SmallChange="100" TickPlacement="BottomRight" TickFrequency="500" IsSnapToTickEnabled="False"/>
                                     </Grid>
-                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,52,0,0" VerticalAlignment="Top">
+                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="0,56,0,0" VerticalAlignment="Top">
                                         <Label Content="Write" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <Slider VerticalAlignment="Center" Margin="42,2,0,2" IsMoveToPointEnabled="True" 
+                                        <Slider VerticalAlignment="Center" Margin="42,0,0,0" IsMoveToPointEnabled="True" 
                                                 Minimum="100" Maximum="10000" Value="{Binding SendTimeout, UpdateSourceTrigger=PropertyChanged}"
-                                                ToolTip="Time to wait for a message to be sent" AutoToolTipPlacement="TopLeft"/>
+                                                ToolTip="Time to wait for a message to be sent" AutoToolTipPlacement="TopLeft" 
+                                                TickPlacement="BottomRight" LargeChange="500" SmallChange="100" TickFrequency="500" IsSnapToTickEnabled="False"/>
                                     </Grid>
-                                    <Separator Margin="0,83,0,0" Height="1" VerticalAlignment="Top"/>
-                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="26" Margin="0,87,0,0" VerticalAlignment="Top">
+                                    <Separator Margin="0,86,0,0" Height="1" VerticalAlignment="Top"/>
+                                    <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="0,91,0,0" VerticalAlignment="Top">
                                         <Label Content="Buffer" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                        <Slider VerticalAlignment="Center" Margin="42,2,0,2" IsMoveToPointEnabled="True" 
-                                                Minimum="64" Maximum="4096" Value="{Binding BufferSize, UpdateSourceTrigger=PropertyChanged}"
-                                                ToolTip="(Probably) the size of the buffer for the received and sent messages" AutoToolTipPlacement="TopLeft"/>
+                                        <Slider VerticalAlignment="Center" Margin="42,0,0,0" IsMoveToPointEnabled="True" 
+                                                Minimum="64" Maximum="8192" Value="{Binding BufferSize, UpdateSourceTrigger=PropertyChanged}"
+                                                ToolTip="(Probably) the size of the buffer for the received and sent messages" AutoToolTipPlacement="TopLeft" 
+                                                TickPlacement="BottomRight" TickFrequency="320" SmallChange="64" LargeChange="128" IsSnapToTickEnabled="False"/>
                                     </Grid>
-                                    <Button Command="{Binding ClearBuffersCommand}" Content="Clear Buffers" Margin="0,115,0,0"
+                                    <Button Command="{Binding ClearBuffersCommand}" Content="Clear Buffers" Margin="0,126,0,0"
                                             ToolTip="(Probably) Clears the buffer... obviously"/>
                                 </Grid>
                             </Grid>
