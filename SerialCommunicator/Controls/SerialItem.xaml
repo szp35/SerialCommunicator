@@ -19,6 +19,7 @@
                 Background="Transparent"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="23" Height="23" 
+                BorderThickness="0"
                 Click="Button_Click">
             <Grid Margin="1 1 0 0">
                 <Line X1="0" Y1="0" X2="11" Y2="11" Stroke="#FFE81414" StrokeThickness="3" />

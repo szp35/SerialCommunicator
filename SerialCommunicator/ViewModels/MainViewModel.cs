@@ -19,15 +19,6 @@ namespace SerialCommunicator.ViewModels
         public ICommand RefreshCOMPortsCommand { get; set; }
         public ICommand ResetSerialViewCommand { get; set; }
         public ObservableCollection<string> AvaliableCOMPorts { get; set; }
-
-
-        //private SerialViewModel _serialView;
-        //public SerialViewModel ItemView.SerialView
-        //{
-        //    get => _serialView;
-        //    set => RaisePropertyChanged(ref _serialView, value);
-        //}
-
         public SerialsListViewModel SerialsList { get; set; }
         public HelpViewModel Help { get; set; }
 
@@ -39,7 +30,6 @@ namespace SerialCommunicator.ViewModels
 
             SerialsList = new SerialsListViewModel();
             Help = new HelpViewModel();
-            //SerialsList.ItemChanged = SelectedSerialItemChanged;
             RefreshCOMPorts();
         }
 
@@ -51,16 +41,6 @@ namespace SerialCommunicator.ViewModels
                 AvaliableCOMPorts.Add(port);
             }
         }
-
-        //public void SelectedSerialItemChanged(SerialItem item)
-        //{
-        //    if (item != null)
-        //    {
-        //        ItemView.SerialView = item.ItemView.SerialView;
-        //    }
-        //    else
-        //        ItemView.SerialView = null;
-        //}
 
         public void ResetSerialView()
         {

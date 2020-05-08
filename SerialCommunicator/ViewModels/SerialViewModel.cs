@@ -60,7 +60,9 @@ namespace SerialCommunicator.ViewModels
             {
                 RaisePropertyChanged(ref _serialItemName, value);
                 if (GraphWindow != null && !string.IsNullOrEmpty(value))
+                {
                     GraphWindow.Title = value;
+                }
             }
         }
         public bool IsConnected
@@ -86,7 +88,7 @@ namespace SerialCommunicator.ViewModels
         public double MaximumAllowedMessages
         {
             get => _maximumAllowedMessages;
-            set { RaisePropertyChanged(ref _maximumAllowedMessages, value); }
+            set => RaisePropertyChanged(ref _maximumAllowedMessages, value);
         }
         public string COMName
         {
@@ -178,8 +180,10 @@ namespace SerialCommunicator.ViewModels
         public SerialViewModel(string name) : this()
         {
             SerialItemName = name;
-            GraphWindow = new GraphWindow();
-            GraphWindow.Title = SerialItemName;
+            GraphWindow = new GraphWindow
+            {
+                Title = SerialItemName
+            };
         }
 
         ~SerialViewModel()
@@ -208,12 +212,14 @@ namespace SerialCommunicator.ViewModels
             }
         }
 
-        bool IsDigitsOnly(string str)
+        private bool IsDigitsOnly(string str)
         {
             foreach (char c in str)
             {
                 if (c < '0' || c > '9')
+                {
                     return false;
+                }
             }
 
             return true;
@@ -225,20 +231,31 @@ namespace SerialCommunicator.ViewModels
 
         public void WriteMessagesToFile()
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            sfd.FileName = "serialLog1";
-            sfd.Title = "Select a location to save every sent/received message to (as a txt)";
-            sfd.Filter = "Text File|*.txt";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                FileName = "serialLog1",
+                Title = "Select a location to save every sent/received message to (as a txt)",
+                Filter = "Text File|*.txt"
+            };
             if (sfd.ShowDialog() == true)
             {
                 List<SerialMessageModel> messages = new List<SerialMessageModel>();
                 foreach (SerialMessage item in ReceivedMessages)
+                {
                     if (item.DataContext is SerialMessageModel message)
+                    {
                         messages.Add(message);
+                    }
+                }
+
                 foreach (SerialMessage item in SentMessages)
+                {
                     if (item.DataContext is SerialMessageModel message)
+                    {
                         messages.Add(message);
+                    }
+                }
 
                 MessageWriter.WriteToFile(sfd.FileName, messages);
             }
@@ -251,9 +268,13 @@ namespace SerialCommunicator.ViewModels
         public void AutoConnectDisconnect()
         {
             if (IsConnected)
+            {
                 Disconnect();
+            }
             else
+            {
                 Connect();
+            }
         }
 
         public void Connect()
@@ -326,9 +347,14 @@ namespace SerialCommunicator.ViewModels
         public void RestartSerialPort()
         {
             if (SerialPort != null)
+            {
                 SerialPort.Dispose();
-            SerialPort = new SerialPort();
-            SerialPort.NewLine = "\n";
+            }
+
+            SerialPort = new SerialPort
+            {
+                NewLine = "\n"
+            };
             SerialPort.DataReceived += SerialPort_DataReceived;
             SerialPort.ErrorReceived += SerialPort_ErrorReceived;
         }
@@ -389,17 +415,17 @@ namespace SerialCommunicator.ViewModels
         {
             switch (e.EventType)
             {
-                case SerialError.Frame:    
+                case SerialError.Frame:
                     ErrorMessage(
                         "Framing error detected: attempted to read from wrong starting point of data. " +
                         "solution: [RESTART SERIALPORT]");
                     RestartSerialPort(); break;
-                case SerialError.Overrun:  
+                case SerialError.Overrun:
                     ErrorMessage(
                         "Overrun error detected: data arrived before previous data could be processed. " +
                         "solution: [RESTART SERIALPORT.]");
                     RestartSerialPort(); break;
-                case SerialError.RXOver:   
+                case SerialError.RXOver:
                     ErrorMessage(
                         "RXOver error detected: the receive buffer is full, or data was received after end-of-file marker. " +
                         "solution: [(user)CLEAR BUFFERS]"); break;
@@ -407,7 +433,7 @@ namespace SerialCommunicator.ViewModels
                     ErrorMessage(
                         "RXParity error detected: parity might not have been applied, or data was corrupted. " +
                         "solution: [none]"); break;
-                case SerialError.TXFull:   
+                case SerialError.TXFull:
                     ErrorMessage(
                         "TXFull error detected: attempted to transmit data when output buffer was full." +
                         " solution: [(user)CLEAR BUFFERS]"); break;
@@ -419,11 +445,31 @@ namespace SerialCommunicator.ViewModels
         #region GUI Messaging Methods
 
         //all thread safe
-        public void BufferMessage(string message) => AddAutomaticMessage("Buffer", message);
-        public void AlertMessage(string message) => AddAutomaticMessage("Alert", message);
-        public void ErrorMessage(string message) => AddAutomaticMessage("Error", message);
-        public void MessageReceived(string message) => AddAutomaticMessage("RX", message);
-        public void MessageSent(string message) => AddAutomaticMessage("TX", message);
+        public void BufferMessage(string message)
+        {
+            AddAutomaticMessage("Buffer", message);
+        }
+
+        public void AlertMessage(string message)
+        {
+            AddAutomaticMessage("Alert", message);
+        }
+
+        public void ErrorMessage(string message)
+        {
+            AddAutomaticMessage("Error", message);
+        }
+
+        public void MessageReceived(string message)
+        {
+            AddAutomaticMessage("RX", message);
+        }
+
+        public void MessageSent(string message)
+        {
+            AddAutomaticMessage("TX", message);
+        }
+
         //thread safe
         public void AddAutomaticMessage(string transmissionDirection, string message)
         {
@@ -446,47 +492,71 @@ namespace SerialCommunicator.ViewModels
         public void AddSentMessage(SerialMessageModel message)
         {
             if (Application.Current != null)
+            {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (SentMessages.Count >= MaximumAllowedMessages) SentMessages.Clear();
+                    if (SentMessages.Count >= MaximumAllowedMessages)
+                    {
+                        SentMessages.Clear();
+                    }
+
                     InsertSent(0, new SerialMessage(message, SentMessages.Count));
                 });
+            }
         }
         //thread safe
         public void AddReceivedMessage(SerialMessageModel message)
         {
             if (Application.Current != null)
+            {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages)
+                    {
+                        ReceivedMessages.Clear();
+                    }
+
                     InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count));
                 });
+            }
         }
         //thread safe
         public void AddErrorMessage(SerialMessageModel message)
         {
             if (Application.Current != null)
+            {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages)
+                    {
+                        ReceivedMessages.Clear();
+                    }
+
                     InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
                     });
                 });
+            }
         }
         //thread safe
         public void AddAlertMessage(SerialMessageModel message)
         {
             if (Application.Current != null)
+            {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    if (ReceivedMessages.Count >= MaximumAllowedMessages) ReceivedMessages.Clear();
+                    if (ReceivedMessages.Count >= MaximumAllowedMessages)
+                    {
+                        ReceivedMessages.Clear();
+                    }
+
                     InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
                     {
                         Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
                     });
                 });
+            }
         }
 
         public void InsertReceived(int index, SerialMessage msg)
@@ -505,7 +575,9 @@ namespace SerialCommunicator.ViewModels
         public void SendMessage()
         {
             if (!string.IsNullOrEmpty(ToBeSentText))
+            {
                 SendMessage(ToBeSentText);
+            }
         }
 
         public void SendMessage(string message)
@@ -583,23 +655,27 @@ namespace SerialCommunicator.ViewModels
 
             int nBytesToRead = SerialPort.BytesToRead;
             byte[] buffer = new byte[nBytesToRead];
-            
+
             if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
             {
                 ErrorMessage("More data was read than what was supposed to be read.");
             }
-            
+
             string receivedData = (SerialPort.Encoding).GetString(buffer);
             ReceivedDataBuffer += receivedData;
-            
+
             if (ReceivedDataBuffer.EndsWith("\n"))
             {
                 string received = ReceivedDataBuffer.Split('\n')[0];
                 ReceivedDataBuffer = "";
                 if (!string.IsNullOrEmpty(received))
+                {
                     return received;
+                }
                 else
+                {
                     return null;
+                }
             }
 
             return null;
@@ -667,8 +743,8 @@ namespace SerialCommunicator.ViewModels
         {
             if (SerialPort.IsOpen)
             {
-              SerialPort.DiscardInBuffer();
-              SerialPort.DiscardOutBuffer();
+                SerialPort.DiscardInBuffer();
+                SerialPort.DiscardOutBuffer();
             }
             else
             {
@@ -731,17 +807,23 @@ namespace SerialCommunicator.ViewModels
         }
         private void UpdateSendTimeout(int newVal)
         {
-            if (!SerialPort.IsOpen && newVal > 0) SerialPort.WriteTimeout = newVal;
+            if (!SerialPort.IsOpen && newVal > 0)
+            {
+                SerialPort.WriteTimeout = newVal;
+            }
         }
         private void UpdateReceiveTimeout(int newVal)
         {
-            if (!SerialPort.IsOpen && newVal > 0) SerialPort.ReadTimeout = newVal;
+            if (!SerialPort.IsOpen && newVal > 0)
+            {
+                SerialPort.ReadTimeout = newVal;
+            }
         }
         private void UpdateBufferSize(int newVal)
         {
             if (!SerialPort.IsOpen && newVal > 0)
             {
-                SerialPort.ReadBufferSize = newVal; 
+                SerialPort.ReadBufferSize = newVal;
                 SerialPort.WriteBufferSize = newVal;
             }
         }
@@ -758,23 +840,38 @@ namespace SerialCommunicator.ViewModels
         }
         private void UpdateBaudRate(int newVal)
         {
-            if (!SerialPort.IsOpen && newVal > 0) SerialPort.BaudRate = newVal;
+            if (!SerialPort.IsOpen && newVal > 0)
+            {
+                SerialPort.BaudRate = newVal;
+            }
         }
         private void UpdateDataBits(int newVal)
         {
-            if (!SerialPort.IsOpen && newVal > 0) SerialPort.DataBits = newVal;
+            if (!SerialPort.IsOpen && newVal > 0)
+            {
+                SerialPort.DataBits = newVal;
+            }
         }
         private void UpdateStopBits(string newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), newVal);
+            if (!SerialPort.IsOpen)
+            {
+                SerialPort.StopBits = (StopBits)Enum.Parse(typeof(StopBits), newVal);
+            }
         }
         private void UpdateParity(string newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.Parity = (Parity)Enum.Parse(typeof(Parity), newVal);
+            if (!SerialPort.IsOpen)
+            {
+                SerialPort.Parity = (Parity)Enum.Parse(typeof(Parity), newVal);
+            }
         }
         private void UpdateHandShake(string newVal)
         {
-            if (!SerialPort.IsOpen) SerialPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), newVal);
+            if (!SerialPort.IsOpen)
+            {
+                SerialPort.Handshake = (Handshake)Enum.Parse(typeof(Handshake), newVal);
+            }
         }
         private void UpdateDTR(bool newVal)
         {

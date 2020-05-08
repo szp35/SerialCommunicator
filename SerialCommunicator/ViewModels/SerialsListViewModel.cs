@@ -36,7 +36,6 @@ namespace SerialCommunicator.ViewModels
             }
         }
 
-        //public Action<SerialItem> ItemChanged { get; set; }
         public Action ScrollReceivedIntoViewCallback { get; set; }
         public Action ScrollSentIntoViewCallback { get; set; }
         public Action<string> MessageReceivedCallback { get; set; }
