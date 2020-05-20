@@ -36,12 +36,16 @@ namespace SerialCommunicator
         {
             if (!SettingsMenuShowing)
             {
-                AnimateSettingsMenu(0, 200, TimeSpan.FromSeconds(0.2));
+                AnimateSettingsMenu(0, 
+                    GlobalSettings.SETTINGMENU_PANEL_WIDTH, 
+                    TimeSpan.FromSeconds(GlobalSettings.SETTINGMENU_ANIMATION_TIME));
                 SettingsMenuShowing = true;
             }
             else
             {
-                AnimateSettingsMenu(200, 0, TimeSpan.FromSeconds(0.2));
+                AnimateSettingsMenu(
+                    GlobalSettings.SETTINGMENU_PANEL_WIDTH, 0, 
+                    TimeSpan.FromSeconds(GlobalSettings.SETTINGMENU_ANIMATION_TIME));
                 SettingsMenuShowing = false;
             }
         }

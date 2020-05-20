@@ -11,16 +11,13 @@ namespace SerialCommunicator.ViewModels
     {
         private bool _sendWithNewLine;
         private bool _receiveWithNewLine;
-
         private string _customTag;
         private bool _sendWithCustomTag;
         private bool _receiveWithCustomTag;
-
         private bool _sendWithNothingElse;
         private bool _receiveWithNothingElse;
-
         private bool _clearTBSTAfterTransmission;
-
+        private Encoding _serialEncoding;
         public bool SendWithNewLine
         {
             get => _sendWithNewLine;
@@ -63,6 +60,26 @@ namespace SerialCommunicator.ViewModels
         {
             get => _clearTBSTAfterTransmission;
             set => RaisePropertyChanged(ref _clearTBSTAfterTransmission, value);
+        }
+
+        public Encoding SerialEncoding
+        {
+            get => _serialEncoding;
+            set => RaisePropertyChanged(ref _serialEncoding, value);
+        }
+
+        public List<Encoding> AllSerialEncodings
+        {
+            get
+            {
+                return new List<Encoding>()
+                {
+                    Encoding.ASCII,
+                    Encoding.Unicode,
+                    Encoding.UTF8,
+                    Encoding.UTF32
+                };
+            }
         }
 
         public TransceiveSettingsViewModel()

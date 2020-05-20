@@ -114,7 +114,7 @@
     <Compile Include="Utilities\CharAlphabeticalPositions.cs" />
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandParam.cs" />
-    <Compile Include="Utilities\Debugger.cs" />
+    <Compile Include="Utilities\GlobalSettings.cs" />
     <Compile Include="Utilities\InverseBooleanConverter.cs" />
     <Compile Include="Utilities\ObjectNullToControlEnabledConverter.cs" />
     <Compile Include="ViewModels\GraphViewModel.cs" />

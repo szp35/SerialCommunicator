@@ -6,7 +6,9 @@ using SerialCommunicator.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.IO.Ports;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -160,18 +162,18 @@ namespace SerialCommunicator.ViewModels
 
         public SerialViewModel()
         {
-            ReceivedMessages = new ObservableCollection<SerialMessage>();
-            SentMessages = new ObservableCollection<SerialMessage>();
-            ConnectDisconnedCommand = new Command(AutoConnectDisconnect);
-            SendMessageCommand = new Command(SendMessage);
+            ReceivedMessages             = new ObservableCollection<SerialMessage>();
+            SentMessages                 = new ObservableCollection<SerialMessage>();
+            ConnectDisconnedCommand      = new Command(AutoConnectDisconnect);
+            ClearSentMessagesCommand     = new Command(ClearSentMessages);
+            SendMessageCommand           = new Command(SendMessage);
             ClearReceivedMessagesCommand = new Command(ClearReceivedMessages);
-            ClearSentMessagesCommand = new Command(ClearSentMessages);
-            ClearBuffersCommand = new Command(ClearBuffers);
-            ResetSerialPortCommand = new Command(RestartSerialPort);
-            WriteMessagesToFileCommand = new Command(WriteMessagesToFile);
+            ClearBuffersCommand          = new Command(ClearBuffers);
+            ResetSerialPortCommand       = new Command(RestartSerialPort);
+            WriteMessagesToFileCommand   = new Command(WriteMessagesToFile);
+            Settings                     = new TransceiveSettingsViewModel();
 
             RestartSerialPort();
-            Settings = new TransceiveSettingsViewModel();
             SetDefaultValues();
             UpdateSerialValues();
         }
@@ -263,7 +265,7 @@ namespace SerialCommunicator.ViewModels
 
         #endregion
 
-        #region Crucial SerialPort methods
+        #region SerialPort connect/disconnect methods
 
         public void AutoConnectDisconnect()
         {
@@ -294,8 +296,7 @@ namespace SerialCommunicator.ViewModels
                 AlertMessage(
                     $"Successfully connected to {ActiveCOMName}. " +
                     $"Baud: {SerialPort.BaudRate} | " +
-                    $"DataBits: {SerialPort.DataBits} | " +
-                    $"StopBits: {SerialPort.StopBits}");
+                    $"Encoding: {SerialPort.Encoding.EncodingName}");
                 ConnectDisconnectButtonContent = "Disconnect";
                 WriteExtraBufferData();
             }
@@ -353,7 +354,7 @@ namespace SerialCommunicator.ViewModels
 
             SerialPort = new SerialPort
             {
-                NewLine = "\n"
+                NewLine = GlobalSettings.DEFAULT_SERIAL_END
             };
             SerialPort.DataReceived += SerialPort_DataReceived;
             SerialPort.ErrorReceived += SerialPort_ErrorReceived;
@@ -379,7 +380,6 @@ namespace SerialCommunicator.ViewModels
                                 MessageReceived(dataReceived);
                                 PlotMessageToGraph(dataReceived);
                             }
-                            //MessageReceived(SerialPort.ReadLine());
                         }
                         else if (Settings.ReceiveWithCustomTag)
                         {
@@ -428,7 +428,7 @@ namespace SerialCommunicator.ViewModels
                 case SerialError.RXOver:
                     ErrorMessage(
                         "RXOver error detected: the receive buffer is full, or data was received after end-of-file marker. " +
-                        "solution: [(user)CLEAR BUFFERS]"); break;
+                        "solution: [CLEAR BUFFERS]"); break;
                 case SerialError.RXParity:
                     ErrorMessage(
                         "RXParity error detected: parity might not have been applied, or data was corrupted. " +
@@ -436,7 +436,7 @@ namespace SerialCommunicator.ViewModels
                 case SerialError.TXFull:
                     ErrorMessage(
                         "TXFull error detected: attempted to transmit data when output buffer was full." +
-                        " solution: [(user)CLEAR BUFFERS]"); break;
+                        " solution: [CLEAR BUFFERS]"); break;
             }
         }
 
@@ -592,9 +592,8 @@ namespace SerialCommunicator.ViewModels
                         SetWaitingStatus(true);
 
                         if (Settings.SendWithNewLine)
-                        {
                             SerialPort.WriteLine(message);
-                        }
+
                         else if (Settings.SendWithCustomTag)
                         {
                             //idc this is messy but it might work
@@ -604,15 +603,12 @@ namespace SerialCommunicator.ViewModels
                             SerialPort.NewLine = originalTag;
                         }
                         else if (Settings.SendWithNothingElse)
-                        {
                             SerialPort.Write(message);
-                        }
+
                         MessageSent(message);
 
                         if (Settings.ClearTBSTAfterTransmission)
-                        {
                             ToBeSentText = "";
-                        }
 
                         SetWaitingStatus(false);
                     }
@@ -650,16 +646,11 @@ namespace SerialCommunicator.ViewModels
 
         public string ReadLine()
         {
-            //SerialPort.NewLine = "\n";
-            //return SerialPort.ReadLine();
-
             int nBytesToRead = SerialPort.BytesToRead;
             byte[] buffer = new byte[nBytesToRead];
 
             if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
-            {
                 ErrorMessage("More data was read than what was supposed to be read.");
-            }
 
             string receivedData = (SerialPort.Encoding).GetString(buffer);
             ReceivedDataBuffer += receivedData;
@@ -668,38 +659,10 @@ namespace SerialCommunicator.ViewModels
             {
                 string received = ReceivedDataBuffer.Split('\n')[0];
                 ReceivedDataBuffer = "";
-                if (!string.IsNullOrEmpty(received))
-                {
-                    return received;
-                }
-                else
-                {
-                    return null;
-                }
+                return !string.IsNullOrEmpty(received) ? received : null;
             }
 
             return null;
-
-            //int nBytesToRead = SerialPort.BytesToRead;
-            //byte[] buffer = new byte[nBytesToRead];
-            //
-            //if (SerialPort.Read(buffer, 0, nBytesToRead) > nBytesToRead)
-            //{
-            //    ErrorMessage("More data was read than what was supposed to be read.");
-            //}
-            //
-            //string receivedData = (SerialPort.Encoding).GetString(buffer);
-            //ReceivedDataBuffer += receivedData;
-
-            //string receivedDat = SerialPort.ReadLine();
-            //return receivedDat.TrimEnd();
-            //if (ReceivedDataBuffer[ReceivedDataBuffer.Length - 1] == '\n')
-            //{
-            //    //takes out \n 
-            //    string received = ReceivedDataBuffer.Split('\n')[0];
-            //    ReceivedDataBuffer = "";
-            //    return received;
-            //}
         }
 
         public string ReadWithCustomTag()
@@ -781,29 +744,28 @@ namespace SerialCommunicator.ViewModels
 
         public void UpdateSerialValues()
         {
-            UpdateSendTimeout(int.Parse(Math.Round(SendTimeout, 0).ToString()));
-            UpdateReceiveTimeout(int.Parse(Math.Round(ReceiveTimeout, 0).ToString()));
-            UpdateBufferSize(int.Parse(Math.Round(BufferSize, 0).ToString()));
-            UpdateCOMName(COMName);
-            UpdateBaudRate(int.Parse(Math.Round(double.Parse(BaudRate), 0).ToString()));
-            UpdateDataBits(int.Parse(Math.Round(double.Parse(DataBits), 0).ToString()));
-            UpdateStopBits(StopBits);
-            UpdateParity(Parity);
-            UpdateHandShake(HandShake);
-            UpdateDTR(DataTerminalReady);
-
-            //MessageBox.Show(
-            //    $"SendTimeout:    {SendTimeout}\n" +
-            //    $"ReceiveTimeout: {ReceiveTimeout}\n" +
-            //    $"BufferSize:     {BufferSize}\n" +
-            //    $"COMName:        {COMName}\n" +
-            //    $"ActiveCOMName:  {ActiveCOMName}\n" +
-            //    $"BaudRate:       {BaudRate}\n" +
-            //    $"DataBits:       {DataBits}\n" +
-            //    $"StopBits:       {StopBits}\n" +
-            //    $"Parity:         {Parity}\n" +
-            //    $"HandShake:      {HandShake}\n" +
-            //    $"DTR:            {DataTerminalReady}\n");
+            try
+            {
+                UpdateSendTimeout(int.Parse(Math.Round(SendTimeout, 0).ToString()));
+                UpdateReceiveTimeout(int.Parse(Math.Round(ReceiveTimeout, 0).ToString()));
+                UpdateBufferSize(int.Parse(Math.Round(BufferSize, 0).ToString()));
+                UpdateCOMName(COMName);
+                UpdateBaudRate(int.Parse(Math.Round(double.Parse(BaudRate), 0).ToString()));
+                UpdateDataBits(int.Parse(Math.Round(double.Parse(DataBits), 0).ToString()));
+                UpdateStopBits(StopBits);
+                UpdateParity(Parity);
+                UpdateHandShake(HandShake);
+                UpdateDTR(DataTerminalReady);
+                UpdateEncoding(Settings.SerialEncoding);
+            }
+            catch (IOException io)
+            {
+                ErrorMessage($"IOException while setting serial values: {io.Message}");
+            }
+            catch (Exception e)
+            {
+                ErrorMessage($"General error while setting serial values: {e.Message}");
+            }
         }
         private void UpdateSendTimeout(int newVal)
         {
@@ -876,6 +838,13 @@ namespace SerialCommunicator.ViewModels
         private void UpdateDTR(bool newVal)
         {
             SerialPort.DtrEnable = newVal;
+        }
+        private void UpdateEncoding(Encoding newEncoding)
+        {
+            if (newEncoding != null && SerialPort != null)
+            {
+                SerialPort.Encoding = newEncoding;
+            }
         }
 
         #endregion
