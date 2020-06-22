@@ -171,11 +171,11 @@
                 </Button>
             </Grid>
         </Grid>
-        <Grid Margin="0,25,0,0">
+        <Grid Margin="0,20,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="2"/>
-                <RowDefinition Height="180" MinHeight="160" MaxHeight="225"/>
+                <RowDefinition Height="180" MinHeight="175" MaxHeight="250"/>
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0" Margin="0,0,0,2">
                 <Grid DockPanel.Dock="Right" x:Name="SettingsMenu"
@@ -271,7 +271,7 @@
                             <Grid Margin="0,0,0,35">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="5*" MinWidth="335"/>
-                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="2"/>
                                     <ColumnDefinition Width="3.5*" MinWidth="332"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Grid.Column="0" Margin="0,0,2,0">
@@ -289,7 +289,7 @@
                                     <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="1,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100"/>
                                     <Label Content="Received Messages" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
-                                    <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1 0" CornerRadius="5 5 0 0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
+                                    <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1 0" CornerRadius="2 2 0 0" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                 </Grid>
                                 <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,26,0,0"/>
                                 <Grid Grid.Column="2" Margin="2,0,0,0">
@@ -306,7 +306,7 @@
                                         </Grid>
                                     </Button>
                                     <Border BorderBrush="{DynamicResource BackgroundColour}" BorderThickness="0 0 0 1" Margin="0,0,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
-                                    <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" CornerRadius="5 5 0 0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
+                                    <Border BorderBrush="{DynamicResource ControlDefaultBorderBrush}" BorderThickness="1 1 1  0" Margin="0,0,0,0" CornerRadius="2 2 0 0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Center" Width="125"/>
                                 </Grid>
                             </Grid>
                             <Grid IsEnabled="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}" Height="33" VerticalAlignment="Bottom">
@@ -329,7 +329,7 @@
             </DockPanel>
             <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Grid Grid.Row="2" Margin="0,2,0,0" IsEnabled="{Binding SerialsList.SelectedItem, Converter={StaticResource ObjectNullConverter}}">
-                <Border Background="{DynamicResource ContainerBackground}" BorderThickness="1" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
+                <Border Background="{DynamicResource ContainerBackground}" BorderThickness="0 1 0 0" BorderBrush="{DynamicResource ControlDefaultBorderBrush}"/>
                 <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="172" >
                     <Grid DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,58">
                         <Label Content="Connect to:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -342,23 +342,23 @@
                             <Grid Width="120" Height="24">
                                 <Image Width="24" Source="Resources/connectIcon.png" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0 0 0 0"/>
                                 <TextBlock Text="{Binding ConnectDisconnectButtonContent, UpdateSourceTrigger=PropertyChanged}"
-                                                   Margin="8 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                           Margin="8 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </Button>
                     </Grid>
                     <Grid DataContext="{Binding SerialsList.SelectedItem.ItemView.SerialView, UpdateSourceTrigger=PropertyChanged}" Height="53" VerticalAlignment="Bottom" >
                         <CheckBox IsChecked="{Binding DataTerminalReady, UpdateSourceTrigger=PropertyChanged}"
-                                          Content="DTR"  VerticalAlignment="Top" HorizontalAlignment="Left"
-                                          Height="24" Width="45"
-                                          ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')"/>
+                                  Content="DTR"  VerticalAlignment="Top" HorizontalAlignment="Left"
+                                  Height="24" Width="45"
+                                  ToolTip="Data Terminal Ready (tell connected device it should be ready to do 'stuff')"/>
                         <ProgressBar IsIndeterminate="{Binding WaitingStatus, UpdateSourceTrigger=PropertyChanged}" 
-                                             Height="24" VerticalAlignment="Bottom" ToolTip="Activity bar, shows if something is 'going on'"/>
+                                     Height="24" VerticalAlignment="Bottom" ToolTip="Activity bar, shows if something is 'going on'"/>
                     </Grid>
 
                     <Button Content="Reset SerialPort" 
-                                    Command="{Binding ResetSerialViewCommand}"
-                                    Margin="45,0,0,28"
-                                    ToolTip="Sometimes a bug that cant be fixed happens. Reset the SerialPort to hopefully fix it. WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC" Height="25" VerticalAlignment="Bottom"/>
+                            Command="{Binding ResetSerialViewCommand}"
+                            Margin="45,0,0,28"
+                            ToolTip="Reset the SerialPort to hopefully fix any bugs. WILL RESET ALL SETTINGS APPLIED, LIKE BAUD RATE, BUFFERSIZE, ETC" Height="25" VerticalAlignment="Bottom"/>
                 </Grid>
                 <Separator Style="{DynamicResource VerticalSeparator}" HorizontalAlignment="Left" Margin="185,10,0,10"/>
                 <Grid Margin="190,10,10,10">
@@ -405,17 +405,17 @@
                             <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="0,56,0,0" VerticalAlignment="Top">
                                 <Label Content="Write" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <Slider VerticalAlignment="Center" Margin="42,0,0,0" IsMoveToPointEnabled="True" 
-                                                Minimum="100" Maximum="10000" Value="{Binding SendTimeout, UpdateSourceTrigger=PropertyChanged}"
-                                                ToolTip="Time to wait for a message to be sent" AutoToolTipPlacement="TopLeft" 
-                                                TickPlacement="BottomRight" LargeChange="500" SmallChange="100" TickFrequency="500" IsSnapToTickEnabled="False"/>
+                                        Minimum="100" Maximum="10000" Value="{Binding SendTimeout, UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="Time to wait for a message to be sent" AutoToolTipPlacement="TopLeft" 
+                                        TickPlacement="BottomRight" LargeChange="500" SmallChange="100" TickFrequency="500" IsSnapToTickEnabled="False"/>
                             </Grid>
                             <Separator Margin="0,86,0,0" Height="1" VerticalAlignment="Top"/>
                             <Grid IsEnabled="{Binding IsConnected, Converter={StaticResource InvertBoolean}, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="0,91,0,0" VerticalAlignment="Top">
                                 <Label Content="Buffer" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <Slider VerticalAlignment="Center" Margin="42,0,0,0" IsMoveToPointEnabled="True" 
-                                                Minimum="64" Maximum="8192" Value="{Binding BufferSize, UpdateSourceTrigger=PropertyChanged}"
-                                                ToolTip="(Probably) the size of the buffer for the received and sent messages" AutoToolTipPlacement="TopLeft" 
-                                                TickPlacement="BottomRight" TickFrequency="320" SmallChange="64" LargeChange="128" IsSnapToTickEnabled="False"/>
+                                        Minimum="64" Maximum="8192" Value="{Binding BufferSize, UpdateSourceTrigger=PropertyChanged}"
+                                        ToolTip="(Probably) the size of the buffer for the received and sent messages" AutoToolTipPlacement="TopLeft" 
+                                        TickPlacement="BottomRight" TickFrequency="256" SmallChange="64" LargeChange="128" IsSnapToTickEnabled="False"/>
                             </Grid>
                             <Button Command="{Binding ClearBuffersCommand}" Content="Clear Buffers" Margin="0,126,0,0"
                                             ToolTip="(Probably) Clears the buffer... obviously"/>
@@ -423,6 +423,8 @@
                     </Grid>
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Margin="1 0 1 0"/>
                     <Grid Grid.Column="2" Margin="4,0,0,0">
+                        <!-- I finely tweaked all of these to never show the horizontal scroll
+                        bar even at the min width of the window... so dont muck these up xd -->
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="64*"/>
                             <ColumnDefinition Width="72*"/>
@@ -437,9 +439,8 @@
                                         Margin="0,0,4,0" Height="24"
                                         ToolTip="Clear and fetch the avaliable COM ports again">
                             <Grid Width="89" Height="20">
-                                <Image Width="16" Source="Resources/refreshIcon.png" 
-                                               HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0 0"/>
-                                <TextBlock Text="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                                <Image Source="Resources/refreshIcon.png" VerticalAlignment="Center" Margin="2,2,0,2" HorizontalAlignment="Left" Width="16"/>
+                                <TextBlock Text="Refresh" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2 0 0 0"/>
                             </Grid>
                         </Button>
 

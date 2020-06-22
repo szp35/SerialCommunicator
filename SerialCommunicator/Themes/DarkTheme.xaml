@@ -47,7 +47,7 @@
                 <ControlTemplate>
                     <Rectangle StrokeDashArray="1 2" 
                                StrokeThickness="1" 
-                               Stroke="{StaticResource ControlBrightPrimaryColourBorderBrush}"
+                               Stroke="{StaticResource ControlDisabledGlythColour}"
                                SnapsToDevicePixels="true" 
                                Margin="2"/>
                 </ControlTemplate>
