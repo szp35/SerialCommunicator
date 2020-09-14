@@ -137,8 +137,8 @@ namespace SerialCommunicator.ViewModels
             get => _cnctDcnctBtnContent;
             set => RaisePropertyChanged(ref _cnctDcnctBtnContent, value);
         }
-        public ObservableCollection<SerialMessage> ReceivedMessages { get; set; }
-        public ObservableCollection<SerialMessage> SentMessages { get; set; }
+        public ObservableCollection<SerialMessageItemViewModel> ReceivedMessages { get; set; }
+        public ObservableCollection<SerialMessageItemViewModel> SentMessages { get; set; }
         public string ToBeSentText
         {
             get => _toBeSentText;
@@ -162,8 +162,8 @@ namespace SerialCommunicator.ViewModels
 
         public SerialViewModel()
         {
-            ReceivedMessages             = new ObservableCollection<SerialMessage>();
-            SentMessages                 = new ObservableCollection<SerialMessage>();
+            ReceivedMessages             = new ObservableCollection<SerialMessageItemViewModel>();
+            SentMessages                 = new ObservableCollection<SerialMessageItemViewModel>();
             ConnectDisconnedCommand      = new Command(AutoConnectDisconnect);
             ClearSentMessagesCommand     = new Command(ClearSentMessages);
             SendMessageCommand           = new Command(SendMessage);
@@ -242,20 +242,20 @@ namespace SerialCommunicator.ViewModels
             };
             if (sfd.ShowDialog() == true)
             {
-                List<SerialMessageModel> messages = new List<SerialMessageModel>();
-                foreach (SerialMessage item in ReceivedMessages)
+                List<SerialMessageViewModel> messages = new List<SerialMessageViewModel>();
+                foreach (SerialMessageItemViewModel item in ReceivedMessages)
                 {
-                    if (item.DataContext is SerialMessageModel message)
+                    if (item.Message != null)
                     {
-                        messages.Add(message);
+                        messages.Add(item.Message);
                     }
                 }
 
-                foreach (SerialMessage item in SentMessages)
+                foreach (SerialMessageItemViewModel item in SentMessages)
                 {
-                    if (item.DataContext is SerialMessageModel message)
+                    if (item.Message != null)
                     {
-                        messages.Add(message);
+                        messages.Add(item.Message);
                     }
                 }
 
@@ -473,10 +473,10 @@ namespace SerialCommunicator.ViewModels
         //thread safe
         public void AddAutomaticMessage(string transmissionDirection, string message)
         {
-            AddAutomaticMessage(new SerialMessageModel() { Message = message, RXorTX = transmissionDirection, Time = DateTime.Now });
+            AddAutomaticMessage(new SerialMessageViewModel() { Message = message, RXorTX = transmissionDirection, Time = DateTime.Now });
         }
         //thread safe
-        public void AddAutomaticMessage(SerialMessageModel message)
+        public void AddAutomaticMessage(SerialMessageViewModel message)
         {
             switch (message.RXorTX)
             {
@@ -489,7 +489,7 @@ namespace SerialCommunicator.ViewModels
             }
         }
         //thread safe
-        public void AddSentMessage(SerialMessageModel message)
+        public void AddSentMessage(SerialMessageViewModel message)
         {
             if (Application.Current != null)
             {
@@ -499,13 +499,13 @@ namespace SerialCommunicator.ViewModels
                     {
                         SentMessages.Clear();
                     }
-
-                    InsertSent(0, new SerialMessage(message, SentMessages.Count));
+                    message.CountIndex = SentMessages.Count.ToString();
+                    InsertSent(0, new SerialMessageItemViewModel(message, GlobalSettings.NORM_BRUSH));
                 });
             }
         }
         //thread safe
-        public void AddReceivedMessage(SerialMessageModel message)
+        public void AddReceivedMessage(SerialMessageViewModel message)
         {
             if (Application.Current != null)
             {
@@ -516,12 +516,13 @@ namespace SerialCommunicator.ViewModels
                         ReceivedMessages.Clear();
                     }
 
-                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count));
+                    message.CountIndex = SentMessages.Count.ToString();
+                    InsertReceived(0, new SerialMessageItemViewModel(message, GlobalSettings.NORM_BRUSH));
                 });
             }
         }
         //thread safe
-        public void AddErrorMessage(SerialMessageModel message)
+        public void AddErrorMessage(SerialMessageViewModel message)
         {
             if (Application.Current != null)
             {
@@ -532,15 +533,13 @@ namespace SerialCommunicator.ViewModels
                         ReceivedMessages.Clear();
                     }
 
-                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
-                    {
-                        Background = new SolidColorBrush(Colors.Red) { Opacity = 0.1 }
-                    });
+                    message.CountIndex = SentMessages.Count.ToString();
+                    InsertReceived(0, new SerialMessageItemViewModel(message, GlobalSettings.ERR_BRUSH));
                 });
             }
         }
         //thread safe
-        public void AddAlertMessage(SerialMessageModel message)
+        public void AddAlertMessage(SerialMessageViewModel message)
         {
             if (Application.Current != null)
             {
@@ -551,19 +550,17 @@ namespace SerialCommunicator.ViewModels
                         ReceivedMessages.Clear();
                     }
 
-                    InsertReceived(0, new SerialMessage(message, ReceivedMessages.Count)
-                    {
-                        Background = new SolidColorBrush(Colors.Orange) { Opacity = 0.1 }
-                    });
+                    message.CountIndex = SentMessages.Count.ToString();
+                    InsertReceived(0, new SerialMessageItemViewModel(message, GlobalSettings.ALERT_BRUSH));
                 });
             }
         }
 
-        public void InsertReceived(int index, SerialMessage msg)
+        public void InsertReceived(int index, SerialMessageItemViewModel msg)
         {
             ReceivedMessages.Insert(index, msg);
         }
-        public void InsertSent(int index, SerialMessage msg)
+        public void InsertSent(int index, SerialMessageItemViewModel msg)
         {
             SentMessages.Insert(index, msg);
         }

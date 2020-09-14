@@ -10,11 +10,11 @@ namespace SerialCommunicator.SerialFileLogger
 {
     public static class MessageWriter
     {
-        public static void WriteToFile(string filePath, List<SerialMessageModel> messages)
+        public static void WriteToFile(string filePath, List<SerialMessageViewModel> messages)
         {
             List<string> formattedMessages = new List<string>();
 
-            foreach (SerialMessageModel message in messages)
+            foreach (SerialMessageViewModel message in messages)
             {
                 formattedMessages.Add($"{message.RXorTX} >> {message.Message} || {message.Time}");
             }

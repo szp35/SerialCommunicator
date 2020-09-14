@@ -1,9 +1,6 @@
 ﻿using SerialCommunicator.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SerialCommunicator.ViewModels
 {
@@ -68,19 +65,7 @@ namespace SerialCommunicator.ViewModels
             set => RaisePropertyChanged(ref _serialEncoding, value);
         }
 
-        public List<Encoding> AllSerialEncodings
-        {
-            get
-            {
-                return new List<Encoding>()
-                {
-                    Encoding.ASCII,
-                    Encoding.Unicode,
-                    Encoding.UTF8,
-                    Encoding.UTF32
-                };
-            }
-        }
+        public List<Encoding> AllSerialEncodings { get; }
 
         public TransceiveSettingsViewModel()
         {
@@ -88,6 +73,13 @@ namespace SerialCommunicator.ViewModels
             ReceiveWithNewLine = true;
             ClearTBSTAfterTransmission = true;
             CustomTag = @"\n";
+            AllSerialEncodings = new List<Encoding>()
+            {
+                Encoding.ASCII,
+                Encoding.Unicode,
+                Encoding.UTF8,
+                Encoding.UTF32
+            };
         }
     }
 }

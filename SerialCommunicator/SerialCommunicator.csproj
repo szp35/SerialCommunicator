@@ -57,8 +57,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\SerialItem.xaml.cs">
-      <DependentUpon>SerialItem.xaml</DependentUpon>
+    <Compile Include="Controls\SerialPortItem.xaml.cs">
+      <DependentUpon>SerialPortItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SerialMessage.xaml.cs">
       <DependentUpon>SerialMessage.xaml</DependentUpon>
@@ -109,6 +109,7 @@
     <Compile Include="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Themes\ThemesController.cs" />
     <Compile Include="Utilities\AnimationLib.cs" />
     <Compile Include="Utilities\BaseViewModel.cs" />
     <Compile Include="Utilities\CharAlphabeticalPositions.cs" />
@@ -120,9 +121,9 @@
     <Compile Include="ViewModels\GraphViewModel.cs" />
     <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\SerialItemViewModel.cs" />
-    <Compile Include="ViewModels\SerialMessageModel.cs" />
-    <Compile Include="ViewModels\SerialsListViewModel.cs" />
+    <Compile Include="ViewModels\SerialPortItemViewModel.cs" />
+    <Compile Include="ViewModels\SerialMessageItemViewModel.cs" />
+    <Compile Include="ViewModels\SerialMessageViewModel.cs" />
     <Compile Include="ViewModels\SerialViewModel.cs" />
     <Compile Include="ViewModels\TransceiveSettingsViewModel.cs" />
     <Compile Include="Windows\DataFormatTransceiverWindow.xaml.cs">
@@ -137,7 +138,7 @@
     <Compile Include="Windows\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\SerialItem.xaml">
+    <Page Include="Controls\SerialPortItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
